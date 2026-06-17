@@ -1,0 +1,11 @@
+.DS_Store
+.idea/
+
+AndroidAccounting/.gradle/
+AndroidAccounting/.idea/
+AndroidAccounting/build/
+AndroidAccounting/app/build/
+AndroidAccounting/captures/
+AndroidAccounting/.externalNativeBuild/
+AndroidAccounting/.cxx/
+AndroidAccounting/local.properties
