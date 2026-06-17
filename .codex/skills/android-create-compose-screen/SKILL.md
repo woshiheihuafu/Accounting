@@ -1,9 +1,9 @@
 ---
 name: android-create-compose-screen
-description: Create or modify Android Jetpack Compose screens using Route, Screen, stateless Content, MVI contracts, lifecycle-aware state collection, previews, and testable callbacks. Use when the user asks to add a Compose page, screen, form, list/detail flow, settings page, empty/loading/error states, or UI connected to a ViewModel in an Android project.
+description: 创建或修改 Android Jetpack Compose 页面，使用 Route、Screen、无状态 Content、MVI 契约、生命周期感知状态收集、Preview 和可测试回调。适用于新增 Compose 页面、表单、列表/详情流、设置页、空/加载/错误状态，或把 UI 连接到 Android ViewModel。
 ---
 
-# Android Create Compose Screen
+# Android Compose 页面创建
 
 ## 用途
 

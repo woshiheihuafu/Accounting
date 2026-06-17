@@ -1,13 +1,13 @@
 ---
 name: android-feature-workflow
-description: Manage Android feature delivery from PRD to implementation with Chinese overall technical plans, per-module technical plans, approval gates, progress updates, module-local bug records, and default multi-agent coordination. Use when the user asks to generate an Android technical plan from a PRD, start or continue a module, approve a module plan, develop an Android module, fix Android feature bugs, update requirement progress, or resume Android work across days.
+description: 管理 Android 功能从 PRD/Product 交接到实现的交付流程，包括中文整体技术方案、模块技术方案、审批门禁、进度更新、模块内 bug 记录、Product 变更后的 Android 技术方案更新，以及默认多 Agent 协作。适用于从 PRD/设计稿/Product 影响摘要生成或更新 Android 技术方案、启动或继续模块、审批模块方案、开发 Android 模块、修复 Android 功能 bug、更新需求进度或跨天恢复工作。
 ---
 
-# Android Feature Workflow
+# Android 功能工作流
 
-## Purpose
+## 用途
 
-Use this skill as the orchestration layer for Android feature work. Keep implementation details in the specialized Android skills:
+使用本 skill 作为 Android 功能工作的编排层。实现细节放在专门的 Android skills 中：
 
 - `android-module-architecture`
 - `android-create-compose-screen`
@@ -15,36 +15,40 @@ Use this skill as the orchestration layer for Android feature work. Keep impleme
 - `android-create-repository`
 - `android-network-request`
 
-Always report which rules, documents, skills, and agents were used.
+始终报告使用了哪些规则、文档、skills 和 agents。
 
-Write technical plans, progress records, approval records, bug records, and necessary code comments in Chinese by default. Keep code identifiers, package names, class names, function names, resource keys, and file names in English unless Android conventions require otherwise.
+技术方案、进度记录、审批记录、bug 记录和必要代码注释默认使用中文。代码标识符、package 名、class 名、function 名、resource key 和文件名保持英文，除非 Android 约定另有要求。
 
-This skill is the source of truth for Android feature workflow state, approval gates, feature document roles, progress table markers, bug record format, and default agent assignment. `AGENTS.md` files route tasks and define durable engineering rules. Specialized Android skills provide execution checklists only and should not duplicate workflow state, approval, or agent configuration.
+本 skill 是 Android 功能工作流状态、审批门禁、功能文档职责、进度表标记、bug 记录格式和默认 Agent 分工的事实来源。`AGENTS.md` 负责路由任务并定义长期工程规则。专门的 Android skills 只提供执行检查清单，不应重复定义 workflow 状态、审批或 Agent 配置。
 
-## Project-Local Skill Priority
+Product PRD、设计稿、需求索引、设计索引和端侧影响摘要是项目级输入，由 `product-workflow` 管理。只有当用户要求 Android 技术方案或 Android 实现工作时，本 Android workflow 才消费这些输入。
 
-For this repository, prefer project-local skills under:
+## 项目本地 Skill 优先级
+
+在本仓库中，优先使用以下项目本地 skills：
 
 ```text
 .codex/skills/android-*/SKILL.md
 ```
 
-If a global skill conflicts with a project-local skill, follow the project-local skill.
+如果全局 skill 与项目本地 skill 冲突，遵循项目本地 skill。
 
-## Default Documents
+## 默认文档
 
-Store Android requirement documents under:
+Android 需求文档默认放在：
 
 ```text
 AndroidAccounting/docs/requirements/<feature-name>/overall-tech-plan.md
 AndroidAccounting/docs/requirements/<feature-name>/modules/<module-name>-tech-plan.md
 ```
 
-If the user provides another location, use that location while keeping the same document roles.
+如果用户提供其他位置，使用用户指定位置，但保持相同的文档职责。
 
-## Status Model
+每个功能只保留一个当前有效的 `overall-tech-plan.md`。后续 Product 变更必须在同一文件中通过变更记录和任务调整进行增量更新；不要为同一功能创建并行的整体技术方案。
 
-Use these stable status values:
+## 状态模型
+
+使用以下稳定状态值：
 
 ```text
 not_started
@@ -54,7 +58,7 @@ completed
 completed_with_issues
 ```
 
-Use these human-readable markers in progress tables:
+进度表中使用以下可读标记：
 
 | Marker | Status | Meaning |
 | --- | --- | --- |
@@ -64,9 +68,9 @@ Use these human-readable markers in progress tables:
 | ✅ | completed | 开发完成且无已知未解决问题 |
 | ⚠️ | completed_with_issues | 开发完成但存在遗留问题 |
 
-## Approval Model
+## 审批模型
 
-Use these approval values for module technical plans:
+模块技术方案使用以下审批值：
 
 ```text
 pending
@@ -75,20 +79,20 @@ skipped_by_user
 not_required
 ```
 
-Default behavior:
+默认行为：
 
 1. Generate the module technical plan.
 2. Set module status to `technical_plan_created`.
 3. Set approval to `pending`.
 4. Stop before coding and ask for approval.
 
-Skip approval only when the user explicitly says to skip approval or directly start development after generating the plan.
+只有当用户明确要求跳过审批，或生成方案后直接开始开发时，才跳过审批。
 
-## Default Agents
+## 默认 Agents
 
-Use multi-agent coordination by default for Android feature workflow tasks when sub-agents are available.
+当 sub-agents 可用时，Android 功能工作流任务默认使用多 Agent 协作。
 
-Model assignment:
+模型分配：
 
 ```text
 Workflow Agent: gpt-5.5
@@ -98,39 +102,41 @@ Review / QA Agent: gpt-5.5
 Fallback / Bulk Coding Agent: gpt-5.4
 ```
 
-Fallback rules:
+降级规则：
 
-- If `gpt-5.5` is unavailable, use `gpt-5.4`.
-- If `gpt-5.3-codex` is unavailable, use `gpt-5.4`.
-- If sub-agents are unavailable, proceed as a single agent and explicitly report the fallback.
+- 如果 `gpt-5.5` 不可用，使用 `gpt-5.4`。
+- 如果 `gpt-5.3-codex` 不可用，使用 `gpt-5.4`。
+- 如果 sub-agents 不可用，以单 Agent 继续，并明确报告降级。
 
-Agent responsibilities:
+Agent 职责：
 
-- Workflow Agent: read PRD, create and maintain plans, update statuses, record approvals, and coordinate progress.
-- Architecture Agent: review module boundaries, dependency direction, Gradle/module structure, and technical risks.
-- Implementation Agent: implement approved module code using specialized Android implementation skills.
-- Review / QA Agent: review code and documents for consistency with `AGENTS.md`, module plans, status updates, and tests.
-- Fallback / Bulk Coding Agent: handle low-risk repetitive code when useful.
+- Workflow Agent：读取 PRD，创建和维护方案，更新状态，记录审批并协调进度。
+- Architecture Agent：审查模块边界、依赖方向、Gradle/module 结构和技术风险。
+- Implementation Agent：使用专门的 Android 实现 skills 开发已审批的模块代码。
+- Review / QA Agent：审查代码和文档是否与 `AGENTS.md`、模块方案、状态更新和测试一致。
+- Fallback / Bulk Coding Agent：在有价值时处理低风险重复代码。
 
-## Scenario A: Generate Overall Technical Plan
+## 场景 A：生成整体技术方案
 
-Use when the user asks to generate an Android technical plan from a PRD.
+当用户要求从 PRD 生成 Android 技术方案时使用。
 
-Steps:
+步骤：
 
-1. Read root `AGENTS.md`.
-2. Read `AndroidAccounting/AGENTS.md`, even when current working directory is the repository root.
-3. Read this project-local workflow skill.
-4. Read the PRD and referenced product/design docs that are available.
-5. Use Workflow Agent with `gpt-5.5` for the plan when sub-agents are available.
-6. Use Architecture Agent with `gpt-5.5` to review technical stack, module split, dependencies, risks, and development order when sub-agents are available.
-7. Create or update `overall-tech-plan.md`.
-8. Set overall feature status to `technical_plan_created`.
-9. Initialize every module status as `not_started`.
-10. Include a change log entry.
-11. Do not write production code in this scenario.
+1. 读取根 `AGENTS.md`。
+2. 读取 `AndroidAccounting/AGENTS.md`，即使当前工作目录是仓库根目录也要读取。
+3. 读取本项目本地 workflow skill。
+4. 读取可用的 PRD 和引用的产品/设计文档。
+5. 当 sub-agents 可用时，使用 `gpt-5.5` 的 Workflow Agent 生成方案。
+6. 当 sub-agents 可用时，使用 `gpt-5.5` 的 Architecture Agent 审查技术栈、模块拆分、依赖、风险和开发顺序。
+7. 创建或更新 `overall-tech-plan.md`。
+8. 将整体功能状态设为 `technical_plan_created`。
+9. 将每个模块状态初始化为 `not_started`。
+10. 包含一条变更记录。
+11. 本场景不得编写生产代码。
 
-Overall technical plan sections should be concise and stable:
+仅在首次创建整体技术方案，或目标功能不存在有效 `overall-tech-plan.md` 时使用场景 A。如果整体方案已经存在，且用户提供新的 Product PRD/设计/影响输入，改用场景 F。
+
+整体技术方案章节应简洁且稳定：
 
 ```text
 # <Feature Name> Android 端整体技术方案
@@ -150,28 +156,28 @@ Overall technical plan sections should be concise and stable:
 ## 变更记录
 ```
 
-Do not add bug indexes, unresolved issue summaries, legacy issue summaries, or long-term skill/agent configuration sections to the overall technical plan.
+不要把 bug 索引、未解决问题摘要、历史遗留问题摘要，或长期 skill/agent 配置章节加入整体技术方案。
 
-The Android project snapshot is a point-in-time snapshot. Do not update it after every code change. Update it only when core architecture, module structure, core dependencies, or project layout changes materially.
+Android 工程快照是某个时间点的快照。不要在每次代码变更后更新它；只有核心架构、模块结构、核心依赖或项目布局发生实质变化时才更新。
 
-## Scenario B: Generate Module Technical Plan
+## 场景 B：生成模块技术方案
 
-Use when the user asks to start or plan a specific module.
+当用户要求启动或规划某个具体模块时使用。
 
-Steps:
+步骤：
 
-1. Read root `AGENTS.md`.
-2. Read `AndroidAccounting/AGENTS.md`.
-3. Read `overall-tech-plan.md`.
-4. Locate the target module and confirm scope.
-5. Use Architecture Agent for module boundary review when relevant and available.
-6. Create or update `modules/<module-name>-tech-plan.md`.
-7. Set module status to `technical_plan_created`.
-8. Set approval to `pending`, unless the user explicitly skips approval.
-9. Update the progress table in `overall-tech-plan.md`.
-10. Stop before implementation when approval is pending.
+1. 读取根 `AGENTS.md`。
+2. 读取 `AndroidAccounting/AGENTS.md`。
+3. 读取 `overall-tech-plan.md`。
+4. 定位目标模块并确认范围。
+5. 当相关且可用时，使用 Architecture Agent 审查模块边界。
+6. 创建或更新 `modules/<module-name>-tech-plan.md`。
+7. 将模块状态设为 `technical_plan_created`。
+8. 将审批状态设为 `pending`，除非用户明确跳过审批。
+9. 更新 `overall-tech-plan.md` 中的进度表。
+10. 当审批为 pending 时，在实现前停止。
 
-Module technical plan sections:
+模块技术方案章节：
 
 ```text
 # <Module Name> 模块技术方案
@@ -194,48 +200,48 @@ Module technical plan sections:
 ## 开发记录
 ```
 
-Detailed bug and legacy issue records belong in the related module technical plan.
+详细 bug 和遗留问题记录放在对应模块技术方案中。
 
-## Scenario C: Develop Approved Module
+## 场景 C：开发已审批模块
 
-Use when the user approves a module plan or asks to skip approval and develop.
+当用户审批模块方案，或要求跳过审批并开发时使用。
 
-Steps:
+步骤：
 
-1. Read root `AGENTS.md`, `AndroidAccounting/AGENTS.md`, `overall-tech-plan.md`, and the module technical plan.
-2. Verify approval is `approved_by_user`, `skipped_by_user`, or `not_required`.
-3. If approval is still `pending`, stop and ask for approval unless the user explicitly says to continue.
-4. Set module status to `in_progress` in both the module and overall plan.
-5. Choose specialized skills based on the module plan:
-   - module boundaries: `android-module-architecture`
-   - Compose UI: `android-create-compose-screen`
-   - ViewModel: `android-create-viewmodel`
-   - Repository/data flow: `android-create-repository`
-   - HTTP/API: `android-network-request`
-6. Use Implementation Agent with `gpt-5.3-codex` for implementation when sub-agents are available and the work can be safely delegated.
-7. Use Review / QA Agent with `gpt-5.5` for review when sub-agents are available.
-8. Run the narrowest available validation commands.
-9. Update the module development log.
-10. Set module status to `completed` or `completed_with_issues`.
-11. Update `overall-tech-plan.md` progress only; do not add detailed bug records to the overall plan.
+1. 读取根 `AGENTS.md`、`AndroidAccounting/AGENTS.md`、`overall-tech-plan.md` 和模块技术方案。
+2. 验证审批状态为 `approved_by_user`、`skipped_by_user` 或 `not_required`。
+3. 如果审批仍为 `pending`，停止并请求审批，除非用户明确要求继续。
+4. 在模块方案和整体方案中都将模块状态设为 `in_progress`。
+5. 根据模块方案选择专门 skills：
+   - 模块边界：`android-module-architecture`
+   - Compose UI：`android-create-compose-screen`
+   - ViewModel：`android-create-viewmodel`
+   - Repository/data flow：`android-create-repository`
+   - HTTP/API：`android-network-request`
+6. 当 sub-agents 可用且工作可以安全委派时，使用 `gpt-5.3-codex` 的 Implementation Agent 实现。
+7. 当 sub-agents 可用时，使用 `gpt-5.5` 的 Review / QA Agent 审查。
+8. 运行范围最窄的可用验证命令。
+9. 更新模块开发记录。
+10. 将模块状态设为 `completed` 或 `completed_with_issues`。
+11. 只更新 `overall-tech-plan.md` 的进度；不要把详细 bug 记录加入整体方案。
 
-## Scenario D: Record Or Fix Bug
+## 场景 D：记录或修复 Bug
 
-Use when the user reports a bug or Codex finds a bug during work.
+当用户报告 bug，或 Codex 在工作中发现 bug 时使用。
 
-Steps:
+步骤：
 
-1. Read root `AGENTS.md`, `AndroidAccounting/AGENTS.md`, `overall-tech-plan.md`, and the related module technical plan.
-2. Add a bug entry to the module technical plan before fixing.
-3. If the module was `completed`, change it to `completed_with_issues`.
-4. Set bug status to `open`.
-5. Fix the bug.
-6. Run focused validation.
-7. Update the bug status to `resolved`, `in_progress`, or keep `open`.
-8. If all known module issues are resolved, set module status to `completed`; otherwise keep `completed_with_issues`.
-9. Update `overall-tech-plan.md` progress only.
+1. 读取根 `AGENTS.md`、`AndroidAccounting/AGENTS.md`、`overall-tech-plan.md` 和相关模块技术方案。
+2. 修复前先在模块技术方案中添加 bug 记录。
+3. 如果模块原状态为 `completed`，改为 `completed_with_issues`。
+4. 将 bug 状态设为 `open`。
+5. 修复 bug。
+6. 运行聚焦验证。
+7. 将 bug 状态更新为 `resolved`、`in_progress`，或保持 `open`。
+8. 如果模块所有已知问题都已解决，将模块状态设为 `completed`；否则保持 `completed_with_issues`。
+9. 只更新 `overall-tech-plan.md` 的进度。
 
-Bug format in module technical plans:
+模块技术方案中的 bug 格式：
 
 ```text
 ### BUG-001：<标题>
@@ -250,28 +256,71 @@ Bug format in module technical plans:
 - 更新时间：
 ```
 
-## Scenario E: Resume Work
+## 场景 E：恢复工作
 
-Use when the user returns after interruption or asks to continue a module.
+当用户在中断后返回，或要求继续某个模块时使用。
 
-Steps:
+步骤：
 
-1. Read root `AGENTS.md`.
-2. Read `AndroidAccounting/AGENTS.md`.
-3. Read `overall-tech-plan.md`.
-4. Read the target module technical plan.
-5. Report current status, approval state, open module bugs, and the next recommended action.
-6. Continue according to the current state:
-   - `not_started`: generate module technical plan.
-   - `technical_plan_created` with `pending`: ask for approval.
-   - `technical_plan_created` with approved or skipped approval: begin development.
-   - `in_progress`: continue implementation.
-   - `completed`: do not modify unless the user asks for change or bug fix.
-   - `completed_with_issues`: work on open module issues.
+1. 读取根 `AGENTS.md`。
+2. 读取 `AndroidAccounting/AGENTS.md`。
+3. 读取 `overall-tech-plan.md`。
+4. 读取目标模块技术方案。
+5. 报告当前状态、审批状态、未关闭模块 bug 和下一步建议。
+6. 按当前状态继续：
+   - `not_started`：生成模块技术方案。
+   - `technical_plan_created` 且审批为 `pending`：请求审批。
+   - `technical_plan_created` 且已审批或跳过审批：开始开发。
+   - `in_progress`：继续实现。
+   - `completed`：除非用户要求变更或修 bug，否则不修改。
+   - `completed_with_issues`：处理未关闭模块问题。
 
-## Required Reporting
+## 场景 F：将 Product 变更应用到 Android 技术方案
 
-At the start of each workflow task, report:
+当 Product 域 PRD、设计稿、需求索引、设计索引或端侧影响摘要发生变化，且用户要求更新 Android 技术方案或 Android 任务时使用。
+
+步骤：
+
+1. 读取根 `AGENTS.md`。
+2. 读取 `AndroidAccounting/AGENTS.md`。
+3. 读取本项目本地 workflow skill。
+4. 读取 Product 输入：相关 PRD、设计资产或设计索引、需求索引、设计索引、变更记录，以及可用的端侧影响摘要。
+5. 读取当前 Android `overall-tech-plan.md`。
+6. 读取 `modules/` 下已有的受影响模块技术方案。
+7. 将 Product 变更归类为以下一种或多种：
+   - 需要新增模块
+   - 扩展已有模块
+   - 修改已有模块行为
+   - 废弃或替代任务
+   - 仅 UI/设计变更
+   - 仅文案/验收变更
+   - 对 Android 无影响
+8. 更新同一个 `overall-tech-plan.md`；不要创建第二份整体技术方案。
+9. 追加变更记录，并在可用时引用来源 Product 文档和受影响的 `REQ-*`、`DESIGN-*`、`SCREEN-*` 或 `FLOW-*` ID。
+10. 为新增模块在进度表新增任务，状态为 `not_started`。
+11. 对受影响的已有模块，更新或创建相关模块技术方案，并将审批状态设为 `pending`，除非用户明确跳过审批。
+12. 保留已有模块状态。不要因为 Product 变更而重新初始化 `completed`、`completed_with_issues`、`in_progress` 或已审批模块状态。
+13. 如果已完成模块需要后续工作，新增变更任务；只有存在未解决实现问题时，才将模块标记为 `completed_with_issues`。
+14. 本场景不得编写生产代码。
+
+场景 F 可更新以下整体方案章节：
+
+```text
+## 需求概述
+## 来源文档
+## 需求模块划分
+## 模块依赖关系
+## 开发顺序
+## 进度记录
+## 风险与假设
+## 变更记录
+```
+
+除非 Product 变更实质影响核心架构、模块结构、核心依赖或项目布局，否则场景 F 不得更新 Android 工程快照。
+
+## 必需汇报
+
+每个 workflow 任务开始时报告：
 
 ```text
 已读取规则/文档：
@@ -287,7 +336,7 @@ At the start of each workflow task, report:
 - Review / QA Agent: <model>
 ```
 
-At completion, report:
+完成时报告：
 
 ```text
 更新文档：

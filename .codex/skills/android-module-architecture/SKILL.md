@@ -1,9 +1,9 @@
 ---
 name: android-module-architecture
-description: Plan, create, or revise Android module architecture, including feature modules, core modules, Gradle module boundaries, dependency direction, public API surfaces, package structure, and ownership rules. Use when the user asks to add a feature module, split code into modules, design Android project structure, move code across modules, define core/data/design-system boundaries, or review modularization.
+description: 规划、创建或调整 Android 模块架构，包括 feature module、core module、Gradle 模块边界、依赖方向、公共 API、包结构和归属规则。适用于新增 feature module、拆分代码模块、设计 Android 项目结构、跨模块移动代码、定义 core/data/design-system 边界，或审查模块化方案。
 ---
 
-# Android Module Architecture
+# Android 模块架构
 
 ## 用途
 

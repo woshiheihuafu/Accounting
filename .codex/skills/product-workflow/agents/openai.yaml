@@ -1,0 +1,4 @@
+interface:
+  display_name: "产品工作流"
+  short_description: "管理项目级 PRD、设计稿和端侧交接"
+  default_prompt: "使用 $product-workflow 创建或更新项目级 PRD、设计稿和端侧影响摘要。"

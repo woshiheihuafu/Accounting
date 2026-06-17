@@ -1,9 +1,9 @@
 ---
 name: android-network-request
-description: Add or modify Android HTTP networking with Retrofit or the project's existing network stack, including API interfaces, DTOs, serialization, RemoteDataSource, DI wiring, error handling, and repository integration. Use when the user asks to add an endpoint, call an API, wire a backend request, parse network responses, handle HTTP errors, or connect Android data code to backend contracts.
+description: 使用 Retrofit 或项目现有网络栈新增或修改 Android HTTP 网络请求，包括 API interface、DTO、序列化、RemoteDataSource、DI 接入、错误处理和 Repository 集成。适用于新增 endpoint、调用 API、接入后端请求、解析网络响应、处理 HTTP 错误，或把 Android 数据代码连接到后端契约。
 ---
 
-# Android Network Request
+# Android 网络请求
 
 ## 用途
 

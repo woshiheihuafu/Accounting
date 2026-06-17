@@ -1,9 +1,9 @@
 ---
 name: android-create-viewmodel
-description: Create or modify Android ViewModels using MVI-style UiState, UiIntent, UiEffect, StateFlow, SharedFlow or Flow, viewModelScope, constructor-injected dependencies, coroutine error handling, and focused unit tests. Use when the user asks to add ViewModel logic, screen state handling, intents, effects, loading/error flows, retry behavior, or presentation business logic.
+description: 创建或修改 Android ViewModel，使用 MVI 风格 UiState、UiIntent、UiEffect、StateFlow、SharedFlow 或 Flow、viewModelScope、构造函数注入依赖、协程错误处理和聚焦单元测试。适用于新增 ViewModel 逻辑、页面状态处理、Intent、Effect、加载/错误流程、重试行为或展示层业务逻辑。
 ---
 
-# Android Create ViewModel
+# Android ViewModel 创建
 
 ## 用途
 

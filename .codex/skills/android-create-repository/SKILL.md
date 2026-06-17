@@ -1,9 +1,9 @@
 ---
 name: android-create-repository
-description: Create Android repository-centered data flows that separate UI/domain code from Retrofit, Room, DataStore, file storage, memory cache, and other data sources. Use when the user asks to add a Repository, local/remote data source, mapper, DTO/entity/domain conversion, cache policy, Flow-based data stream, refresh behavior, or data-layer abstraction.
+description: 创建以 Android Repository 为中心的数据流，将 UI/domain 代码与 Retrofit、Room、DataStore、文件存储、内存缓存和其他数据源隔离。适用于新增 Repository、本地/远端数据源、mapper、DTO/entity/domain 转换、缓存策略、基于 Flow 的数据流、刷新行为或数据层抽象。
 ---
 
-# Android Create Repository
+# Android Repository 创建
 
 ## 用途
 
