@@ -1,11 +1,13 @@
+# macOS / IDE
 .DS_Store
 .idea/
 
+# Android / Gradle
 AndroidAccounting/.gradle/
 AndroidAccounting/.idea/
-AndroidAccounting/build/
-AndroidAccounting/app/build/
+AndroidAccounting/local.properties
 AndroidAccounting/captures/
 AndroidAccounting/.externalNativeBuild/
 AndroidAccounting/.cxx/
-AndroidAccounting/local.properties
+AndroidAccounting/build/
+AndroidAccounting/**/build/
