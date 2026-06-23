@@ -1,0 +1,28 @@
+---
+description: 子 Agent 路由策略，定义主 Agent 何时应将任务派发给哪个子 Agent
+alwaysApply: true
+---
+
+# 子 Agent 路由策略
+
+主 Agent 作为协调者，应将可独立执行的任务通过 Task 工具派发给对应的子 Agent，而不是自己直接执行。
+
+## 路由表
+
+| 任务类型 | subagent_type | 典型场景 |
+| --- | --- | --- |
+| Git 操作、Shell 命令、文件整理、环境配置、常识问答、临时脚本 | `misc` | git commit/branch/merge/rebase、运行脚本、重命名文件 |
+| Android 技术方案、模块架构设计、依赖审查、技术风险评估 | `android-architect` | 从 PRD 生成整体/模块技术方案、审查架构合理性 |
+| Android 代码实现（Compose/ViewModel/Repository/网络层/Bug 修复） | `android-implementer` | 按已审批方案编写 Kotlin/Compose 代码 |
+| 代码审查 | `code-reviewer` | 模块实现完成后审查、PR 前审查、跨模块变更审查 |
+| 产品一致性审查 | `product-reviewer` | PRD 一致性检查、设计稿与需求对齐、需求冲突检测 |
+| 测试生成与运行 | `test-runner` | ViewModel/Repository/Compose UI 测试 |
+| Gradle 模块、CI/CD、lint/format 配置、依赖管理 | `devops` | 新增 Gradle 模块、配置 GitHub Actions、管理 `libs.versions.toml` |
+
+## 路由判断规则
+
+1. **先匹配再执行**：收到用户请求后，先对照路由表判断是否有匹配的子 Agent，有则派发。
+2. **主 Agent 保留的工作**：需要多个子 Agent 协调的复杂流程、需要与用户交互确认的决策、跨领域分析和规划。这些由主 Agent 自行处理或分步协调。
+3. **不确定时**：如果任务可能属于某个子 Agent 但不确定，优先派发——子 Agent 会在自身约束范围内工作。
+4. **组合任务**：一个请求包含多个独立子任务时，可并行派发给不同子 Agent。
+5. **Android 功能工作流**：涉及 PRD 到实现的完整流程时，遵循 `.cursor/skills/android-feature-workflow/SKILL.md` 定义的多 Agent 协作模式。

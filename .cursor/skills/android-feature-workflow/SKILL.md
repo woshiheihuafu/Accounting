@@ -88,28 +88,6 @@ not_required
 
 只有当用户明确要求跳过审批，或生成方案后直接开始开发时，才跳过审批。
 
-## 默认 Agents
-
-Android 功能工作流使用 `.cursor/agents/` 下的自定义 sub-agent 协作。主 Agent 根据任务类型自动或手动委派给对应 sub-agent。
-
-| Agent | 文件 | 模型 | 权限 | 职责 |
-| --- | --- | --- | --- | --- |
-| Workflow Agent | 主 Agent | 当前模型 | 读写 | 读取 PRD，创建和维护方案，更新状态，记录审批并协调进度 |
-| Architecture Agent | `.cursor/agents/android-architect.md` | claude-opus-4-8 | readonly | 审查模块边界、依赖方向、Gradle/module 结构和技术风险 |
-| Implementation Agent | `.cursor/agents/android-implementer.md` | claude-4.6-sonnet-medium-thinking | 读写 | 使用专门的 Android 实现 skills 开发已审批的模块代码 |
-| Code Review Agent | `.cursor/agents/code-reviewer.md` | claude-4.6-sonnet-medium-thinking | readonly | 审查代码和文档是否与规则、模块方案、状态更新和测试一致 |
-| Test Runner Agent | `.cursor/agents/test-runner.md` | composer-2.5-fast | 读写 | 生成并运行测试 |
-| DevOps Agent | `.cursor/agents/devops.md` | composer-2.5-fast | 读写 | 模块 Gradle 配置、CI/CD |
-
-调用方式：
-
-- 自动委派：主 Agent 根据 sub-agent 的 `description` 字段自动判断委派时机。
-- 显式调用：在对话中使用 `/android-architect`、`/android-implementer`、`/code-reviewer`、`/test-runner`、`/devops` 调用。
-
-降级规则：
-
-- 如果 sub-agents 不可用，以单 Agent 继续，并明确报告降级。
-
 ## 场景 A：生成整体技术方案
 
 当用户要求从 PRD 生成 Android 技术方案时使用。
