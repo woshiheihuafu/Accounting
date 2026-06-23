@@ -1,7 +1,6 @@
 ---
 name: android-implementer
-description: >-
-  Android 代码实现专家。在实现已审批的 Android 模块时使用，包括 Compose 页面、ViewModel、
+description: Android 代码实现专家。在实现已审批的 Android 模块时使用，包括 Compose 页面、ViewModel、
   Repository、网络层、模块架构和 Bug 修复。
   Use when implementing approved Android modules -- Compose screens, ViewModels,
   Repositories, network layer, module setup, or fixing bugs.

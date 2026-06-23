@@ -1,11 +1,7 @@
 ---
 name: android-architect
-description: >-
-  Android 架构设计专家。在生成 Android 技术方案、设计模块架构、审查依赖方向、评估技术风险、
-  处理 Product 变更对 Android 技术方案的影响时使用。
-  Use when generating Android tech plans, designing module architecture,
-  reviewing dependency direction, or applying Product changes to Android plans.
-model: inherit
+model: claude-opus-4-8[]
+description: Android 架构设计专家。在生成 Android 技术方案、设计模块架构、审查依赖方向、评估技术风险、   处理 Product 变更对 Android 技术方案的影响时使用。   Use when generating Android tech plans, designing module architecture,   reviewing dependency direction, or applying Product changes to Android plans.
 readonly: true
 ---
 

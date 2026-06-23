@@ -1,10 +1,7 @@
 ---
 name: code-reviewer
-description: >-
-  代码审查专家。在模块实现完成后、PR 提交前、跨模块变更时使用，审查代码是否符合架构规范和编码规则。
-  Use after module implementation to review code against architecture rules,
-  MVI conventions, and naming standards.
 model: claude-4.6-sonnet-medium-thinking
+description: 代码审查专家。在模块实现完成后、PR 提交前、跨模块变更时使用，审查代码是否符合架构规范和编码规则。   Use after module implementation to review code against architecture rules,   MVI conventions, and naming standards.
 readonly: true
 ---
 

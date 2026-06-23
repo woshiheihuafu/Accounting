@@ -95,11 +95,11 @@ Android 功能工作流使用 `.cursor/agents/` 下的自定义 sub-agent 协作
 | Agent | 文件 | 模型 | 权限 | 职责 |
 | --- | --- | --- | --- | --- |
 | Workflow Agent | 主 Agent | 当前模型 | 读写 | 读取 PRD，创建和维护方案，更新状态，记录审批并协调进度 |
-| Architecture Agent | `.cursor/agents/android-architect.md` | inherit | readonly | 审查模块边界、依赖方向、Gradle/module 结构和技术风险 |
-| Implementation Agent | `.cursor/agents/android-implementer.md` | T2 | 读写 | 使用专门的 Android 实现 skills 开发已审批的模块代码 |
-| Code Review Agent | `.cursor/agents/code-reviewer.md` | T2 | readonly | 审查代码和文档是否与规则、模块方案、状态更新和测试一致 |
-| Test Runner Agent | `.cursor/agents/test-runner.md` | T3 | 读写 | 生成并运行测试 |
-| DevOps Agent | `.cursor/agents/devops.md` | T3 | 读写 | 模块 Gradle 配置、CI/CD |
+| Architecture Agent | `.cursor/agents/android-architect.md` | claude-opus-4-8 | readonly | 审查模块边界、依赖方向、Gradle/module 结构和技术风险 |
+| Implementation Agent | `.cursor/agents/android-implementer.md` | claude-4.6-sonnet-medium-thinking | 读写 | 使用专门的 Android 实现 skills 开发已审批的模块代码 |
+| Code Review Agent | `.cursor/agents/code-reviewer.md` | claude-4.6-sonnet-medium-thinking | readonly | 审查代码和文档是否与规则、模块方案、状态更新和测试一致 |
+| Test Runner Agent | `.cursor/agents/test-runner.md` | composer-2.5-fast | 读写 | 生成并运行测试 |
+| DevOps Agent | `.cursor/agents/devops.md` | composer-2.5-fast | 读写 | 模块 Gradle 配置、CI/CD |
 
 调用方式：
 

@@ -1,10 +1,7 @@
 ---
 name: product-reviewer
-description: >-
-  产品一致性审查专家。在审查 PRD 一致性、验证设计稿与需求对齐、检测需求冲突、准备端侧交接时使用。
-  Use when reviewing PRD consistency, validating design-to-requirement alignment,
-  detecting requirement conflicts, or preparing platform handoff.
-model: inherit
+model: claude-sonnet-4-6[]
+description: 产品一致性审查专家。在审查 PRD 一致性、验证设计稿与需求对齐、检测需求冲突、准备端侧交接时使用。   Use when reviewing PRD consistency, validating design-to-requirement alignment,   detecting requirement conflicts, or preparing platform handoff.
 readonly: true
 ---
 
