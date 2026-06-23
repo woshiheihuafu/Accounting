@@ -1,0 +1,139 @@
+---
+description: Android 开发规则，适用于 AndroidAccounting 目录下的 Kotlin/Android 代码
+globs: AndroidAccounting/**/*.{kt,kts,xml,gradle,gradle.kts}
+alwaysApply: false
+---
+
+# Android 开发规则
+
+## Scope
+
+These instructions apply to Android development under `AndroidAccounting/`.
+
+## General Principles
+
+- Prefer simple, maintainable solutions over complex abstractions.
+- Follow the existing architecture and code style in the project.
+- Do not perform unrelated refactors.
+- Every code change should have a clear purpose and value.
+- Read the relevant implementation before modifying code.
+- Android technical plans, module plans, progress records, bug records, and necessary code comments should be written in Chinese by default.
+- Keep Kotlin identifiers, package names, class names, function names, resource keys, and file names in English unless Android conventions require otherwise.
+- For PRD-to-plan, module plans, approvals, progress updates, bug records, and cross-day resume work, use the project-local `android-feature-workflow` skill (`.cursor/skills/android-feature-workflow/SKILL.md`) as the source of truth for workflow details.
+- Specialized Android skills define execution checklists for Compose, ViewModel, Repository, network, and module architecture work.
+
+## Kotlin
+
+- Use Kotlin for new code.
+- Prefer immutable objects.
+- Prefer `val` over `var`.
+- Use expression functions where they improve readability.
+- Avoid platform type leakage.
+- Avoid `!!`.
+- Prefer `sealed interface` or `sealed class` for finite state.
+
+For null safety, prefer:
+
+```kotlin
+value?.let { }
+value ?: defaultValue
+```
+
+Only use `!!` when non-nullability is clearly proven.
+
+## Dependency Injection
+
+- Prefer constructor injection.
+- Prefer depending on interfaces instead of concrete implementations.
+- Use the project's unified dependency injection framework.
+- Do not use the Service Locator pattern.
+- Do not manually create dependencies in ViewModels or UI code.
+
+## Architecture
+
+Use this structure by default:
+
+```text
+UI → ViewModel → Repository → DataSource → Network / Database
+```
+
+Requirements:
+
+- UI must not access databases or network directly.
+- ViewModels must not create repositories.
+- Repository is the single entry point for data access.
+- DataSources only handle data reads and writes.
+- ViewModels own presentation logic and UI decisions.
+- Repositories own data orchestration, cache, refresh, fallback, and data-source policy.
+
+## MVI State Management
+
+- UiState: immutable `data class`, exposed via `StateFlow`, with explicit loading/error states.
+- UiIntent: `sealed interface` for user actions.
+- UiEffect: one-time events (navigation, toast, snackbar, dialog) — do not put in UiState.
+
+## ViewModel
+
+- Expose `StateFlow<UiState>` and `Flow<UiEffect>`.
+- Use single `fun onIntent(intent: UiIntent)` entry point.
+- Use `viewModelScope`. Composables must not contain business logic.
+
+## Coroutines
+
+- Prefer `viewModelScope.launch`, `Flow`, `StateFlow`, `SharedFlow`.
+- Avoid callback-heavy code.
+- Do not use `runBlocking` or `Thread.sleep()` on main thread.
+
+## Compose
+
+Page structure: `Route → Screen → Content`
+
+- Route: navigation, effect collection.
+- Screen: state dispatch, event forwarding.
+- Content: stateless rendering.
+- Use `collectAsStateWithLifecycle()` (not `collectAsState()`).
+- State up, events down. Composables receive only state and callbacks.
+- `LazyColumn`/`LazyRow` must provide stable keys.
+- Prefer `remember`, `derivedStateOf` for performance.
+
+## Design System
+
+- Use theme colors (`Theme.colorScheme.*`), typography (`Theme.typography.*`), and shapes.
+- Avoid hardcoded colors, inline TextStyle, and scattered corner radius values.
+
+## Data Layer
+
+- Repository is the single entry point. UI must not depend on Retrofit, Room, SQL, or API directly.
+- Model mapping: DTO → Mapper → Domain → UI. Do not pass DTOs or entities to UI.
+
+## Error Handling
+
+Do not swallow exceptions. Log, throw, or convert to unified `Result`.
+
+## Network Layer
+
+- Centralized network access. Separate API definitions from business logic.
+- Consistent serialization. No network requests in UI code.
+
+## Testability
+
+- Important UI must provide stable `TestTag` values with business IDs.
+- For stateful changes, cover initial/loading/success/failure/retry/boundary cases.
+
+## Naming
+
+```text
+UserUiState, UserUiIntent, UserUiEffect
+UserRepository, UserRepositoryImpl
+UserRemoteDataSource, UserLocalDataSource
+```
+
+## Prohibited
+
+- UI directly accessing network or databases.
+- ViewModels creating Retrofit or Room.
+- Exposing `MutableState` to UI.
+- Blocking the main thread.
+- Using `!!` without clear reason.
+- Mixing DTO, Entity, and UI models.
+- Running expensive computation in Compose.
