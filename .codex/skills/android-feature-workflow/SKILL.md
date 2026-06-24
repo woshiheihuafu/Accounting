@@ -227,7 +227,8 @@ Android 工程快照是某个时间点的快照。不要在每次代码变更后
 8. 运行范围最窄的可用验证命令。
 9. 更新模块开发记录。
 10. 将模块状态设为 `completed` 或 `completed_with_issues`。
-11. 只更新 `overall-tech-plan.md` 的进度；不要把详细 bug 记录加入整体方案。
+11. 如果状态为 `completed_with_issues`，为每条未解决问题创建 GitHub Issue（见下方"遗留问题归档"规则），并在模块技术方案的 bug 记录中填写 `github_issue` 字段。
+12. 只更新 `overall-tech-plan.md` 的进度；不要把详细 bug 记录加入整体方案。
 
 ## 场景 D：记录或修复 Bug
 
@@ -242,8 +243,9 @@ Android 工程快照是某个时间点的快照。不要在每次代码变更后
 5. 修复 bug。
 6. 运行聚焦验证。
 7. 将 bug 状态更新为 `resolved`、`in_progress`，或保持 `open`。
-8. 如果模块所有已知问题都已解决，将模块状态设为 `completed`；否则保持 `completed_with_issues`。
-9. 只更新 `overall-tech-plan.md` 的进度。
+8. 如果 bug 本次未能解决（状态为 `open` 或 `in_progress`），且尚未有关联的 GitHub Issue，则创建 GitHub Issue（见下方"遗留问题归档"规则），并在 bug 记录中填写 `github_issue` 字段。
+9. 如果模块所有已知问题都已解决，将模块状态设为 `completed`；否则保持 `completed_with_issues`。
+10. 只更新 `overall-tech-plan.md` 的进度。
 
 模块技术方案中的 bug 格式：
 
@@ -256,6 +258,7 @@ Android 工程快照是某个时间点的快照。不要在每次代码变更后
 - 描述：
 - 位置：
 - 解决方案：
+- github_issue：#XX（未提 Issue 时留空）
 - 创建时间：
 - 更新时间：
 ```
@@ -278,6 +281,48 @@ Android 工程快照是某个时间点的快照。不要在每次代码变更后
    - `in_progress`：继续实现。
    - `completed`：除非用户要求变更或修 bug，否则不修改。
    - `completed_with_issues`：处理未关闭模块问题。
+
+## 遗留问题归档
+
+以下场景需要创建 GitHub Issue：
+
+- 场景 C 完成时，模块状态为 `completed_with_issues`，且某条 bug 记录的 `github_issue` 字段为空
+- 场景 D 结束时，bug 状态为 `open` 或 `in_progress`，且尚未关联 GitHub Issue
+
+**不需要创建 Issue 的情况：**
+
+- 本次工作中发现了问题并已在同一轮工作中修复（bug 状态为 `resolved`）
+- bug 记录已有 `github_issue` 编号
+
+**创建命令：**
+
+```bash
+# bug / 遗留问题
+gh issue create \
+  --title "<模块名>: <bug 标题>" \
+  --body "## 问题描述\n\n## 位置\n\n## 复现步骤（如适用）\n\n## 相关技术方案\n\n关联模块方案：AndroidAccounting/docs/requirements/<feature>/modules/<module>-tech-plan.md" \
+  --label bug
+
+# 技术债 / TODO
+gh issue create \
+  --title "TODO: <描述>" \
+  --body "## 背景\n\n## 需要做什么\n\n## 相关技术方案\n" \
+  --label enhancement
+```
+
+创建后，将返回的 Issue 编号（如 `#42`）填入对应 bug 记录的 `github_issue` 字段。
+
+**修复已知 Issue 时的 commit 规范：**
+
+当本次提交修复了某个已知 GitHub Issue，commit message 必须包含关键词引用，GitHub 合并到默认分支后会自动关闭该 Issue：
+
+```
+fix: 修复 HomeScreen 月份选择器闪烁问题
+
+fixes #42
+```
+
+支持的关键词：`fixes`、`closes`、`resolves`（大小写不敏感）。修复后将对应 bug 记录的 `github_issue` 字段标注为已关闭。
 
 ## 场景 F：将 Product 变更应用到 Android 技术方案
 

@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">AndroidAccounting</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_confirm">确定</string>
+    <string name="nav_home">明细</string>
+    <string name="nav_chart">图表</string>
+    <string name="nav_record">记账</string>
+    <string name="nav_discover">发现</string>
+    <string name="nav_profile">我的</string>
+    <string name="nav_home_desc">明细</string>
+    <string name="nav_chart_desc">图表</string>
+    <string name="nav_record_desc">记账</string>
+    <string name="nav_discover_desc">发现</string>
+    <string name="nav_profile_desc">我的</string>
+    <string name="home_title">Code记账</string>
+    <string name="home_label_expense">支出</string>
+    <string name="home_label_income">收入</string>
+    <string name="home_section_detail">明细</string>
+    <string name="home_empty">暂无记账</string>
+    <string name="home_year_month_picker_title">选择月份</string>
+    <string name="coming_soon">即将推出</string>
 </resources>
