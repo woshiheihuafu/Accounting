@@ -93,7 +93,7 @@ AndroidAccounting/
 | 异步 | Kotlin Coroutines + Flow | lifecycle-runtime-ktx 已配置 |
 | 状态收集 | `collectAsStateWithLifecycle()` | 需新增 `lifecycle-runtime-compose` 依赖 |
 | Design System | 自定义 Material3 Theme | 基于墨与纸 Design Token 重写 Color/Typography/Shape |
-| 金额字体 | 嵌入等宽字体 | DIN Alternate / JetBrains Mono 等开源替代 |
+| 金额字体 | 系统等宽（嵌入为延期项） | 当前实现使用系统 `FontFamily.Monospace`；嵌入 DIN/JetBrains Mono 子集为延期项（见 M1 LEFT-001） |
 | 序列化 | kotlinx.serialization | Navigation type-safe routes 需要 |
 
 需新增的 `libs.versions.toml` 依赖：
@@ -329,7 +329,7 @@ M5: 记账页 ──→ M2: 数据层 ──────────┘
 | # | 类型 | 描述 | 影响 | 缓解措施 |
 | --- | --- | --- | --- | --- |
 | R1 | 技术风险 | Compose 无官方 WheelPicker 组件，需自定义实现嵌套 `LazyColumn` + snap + 渐隐效果 | M4、M6 开发周期 | 提前在 M1 基础设施阶段实现通用 WheelPicker；必要时评估开源库（如 compose-wheelview） |
-| R2 | 技术风险 | 等宽金额字体（PRD 推荐 DIN Next / SF Mono）在 Android 端需嵌入自定义字体文件 | 包体积、字体许可 | 使用开源等宽字体（JetBrains Mono / DM Mono）替代；仅嵌入数字子集 |
+| R2 | 技术风险 | 等宽金额字体（PRD 推荐 DIN Next / SF Mono）在 Android 端需嵌入自定义字体文件 | 包体积、字体许可 | 当前实现使用系统 `FontFamily.Monospace` 替代，未嵌入自定义字体（已登记为 M1 LEFT-001，deferred）；后续如需像素级还原再嵌入数字子集 |
 | R3 | 数据风险 | 首期纯本地存储，应用卸载即丢失数据 | 用户体验 | PRD 已明确首期无云同步；Room Migration 预留 version 管理 |
 | R4 | 架构假设 | 单模块 `:app` 内按包分层，不拆 Gradle 模块 | 后续模块化成本 | 包结构按 feature 组织，保持边界清晰；功能增长后可低成本拆分 |
 | R5 | 依赖风险 | Hilt、Room、Navigation Compose 版本兼容性（Kotlin 2.2.10 + AGP 9.2.1）；AGP 9.x 属于大版本更新，Hilt Gradle 插件对 AGP 9.x 的兼容性尚需验证 | 编译失败 | M1 阶段设为**硬性门禁**：先跑通空依赖链编译再写业务；`hilt-compiler` 通过 `ksp()` 接入而非 kapt |
@@ -341,7 +341,7 @@ M5: 记账页 ──→ M2: 数据层 ──────────┘
 - A1：首期仅支持中文界面，国际化预留但不实现。
 - A2：首期不实现数据导出/导入。
 - A3：金额使用 `Long`（分为单位）存储，避免浮点精度问题；UI 层格式化为 `¥xx.xx` 显示。
-- A4：日期范围不设上下限约束，用户可选择任意日期。
+- A4：日期选择不可晚于今天。记账日期选择器与首页年月选择器的年/月/日上限均为当前日期，超出范围的项不可选并响应式 clamp 到今天；`RecordViewModel.ConfirmDate` 对未来日期做钳制防御。来源：用户产品决策（2026-06-24），已同步 PRD REQ-ACCOUNTING-006 与 SCREEN-ACCOUNTING-V2-002/006（intake INTAKE-002）。
 - A5：底部 Bar 结构固定为五个入口，后续功能逐步解锁。
 - A6：实现依据为 PRD-CODE-ACCOUNTING-20260623（墨与纸方案），该 PRD 为本期唯一有效需求来源。
 - A7：记账页输入过程中进程被杀或屏幕旋转，首期不恢复未完成输入（不使用 `SavedStateHandle` 保存中间态）。
@@ -411,3 +411,5 @@ M5: 记账页 ──→ M2: 数据层 ──────────┘
 | 2026-06-24 | 模块实现 | M5 记账页模块实现完成；RecordViewModel（MVI）、CategoryGrid、AmountKeyboard、RecordContent/Screen/Route 全部新建，MoneyFormatter 金额拼接函数、AppNavHost 接线，JVM 测试全部通过，BUILD SUCCESSFUL | 场景 C |
 | 2026-06-24 | 模块实现 | M6 日期选择器模块实现完成；DatePickerDialog.kt 新建（三列 WheelPicker + 日列联动 + testTag），JVM 测试通过，BUILD SUCCESSFUL | 场景 C |
 | 2026-06-24 | 代码审查修复 | M5 代码审查修复 2 Medium/5 Low 问题（Categories 数据流规范、键盘字体 token 化、testTag 补全、防重复提交测试、完成按钮圆角、边界测试），JVM 测试全部通过，BUILD SUCCESSFUL | 场景 D |
+| 2026-06-24 | 设计还原修复 | 对照 code-accounting-v2.pen 做设计还原：①字体改系统默认无衬线（去 Serif），金额沿用系统等宽并扩展 amountMedium/amountSmall；②按设计稿同名 Lucide 图标新增 16 个 Vector Drawable（ic_category_*/ic_tab_*/ic_close/ic_calendar/ic_backspace），替换 android.R.drawable 与 Material Icons 占位；③首页明细按类目映射图标（Categories.iconResFor），首页/汇总/键盘金额统一等宽；④DatePickerDialog 与 YearMonthPickerDialog 禁止选择未来年/月/日并响应式 clamp，RecordViewModel.ConfirmDate 钳制防御；⑤Color/Theme 对齐设计 token（bg #FAFAF8、divider #E8E8E4、text-secondary #8C8C88、新增 brand-light），底部栏改纸白底+去 Material3 染色与选中 pill，类目选中态 brand-light 圆角底+brand 绿图标；新增 CategoriesTest、扩充日期约束测试，JVM 测试全部通过，BUILD SUCCESSFUL，真机首页截图与设计稿对齐。受 MIUI 输入注入限制，记账页/弹窗未做真机截图，以设计稿+代码静态对照验证 | 设计还原 |
+| 2026-06-24 | 假设修订 / 遗留登记 | 回写假设 A4 为"禁止未来日期"以对齐新产品规则与已落地实现；技术栈「金额字体」行与风险 R2 补充说明当前用系统 `FontFamily.Monospace` 替代、嵌入为延期项，并在 M1 模块方案登记 LEFT-001 | 问题分类门（intake INTAKE-002 / INTAKE-005） |

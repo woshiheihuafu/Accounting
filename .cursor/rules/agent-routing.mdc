@@ -28,6 +28,9 @@ alwaysApply: true
 | 产品一致性审查 | `product-reviewer` | PRD 一致性检查、设计稿与需求对齐、需求冲突检测 |
 | 测试生成与运行 | `test-runner` | ViewModel/Repository/Compose UI 测试 |
 | Gradle 模块、CI/CD、lint/format 配置、依赖管理 | `devops` | 新增 Gradle 模块、配置 GitHub Actions、管理 `libs.versions.toml` |
+| 产品/设计变更落地（改 PRD、`.pen`、需求/设计索引） | `product-reviewer`（审查）+ 主 Agent（编写） | 改产品规则/视觉规则、设计还原判定为"变更"后更新 spec |
+
+> 问题分类门 / 设计还原 triage（判定问题属于 bug / 变更 / 遗留 + 登记 `intake.md`）属于**主 Agent 协调**（见白名单），遵循 `android-feature-workflow` 场景 G：证据采集（只读对照 PRD/设计/代码/运行）派 `explore`，判定后按分类再派对应 Agent（bug → `android-implementer`；变更 → 先 Product 域，再 `android-architect`；遗留 → 记录后按需）。
 
 ## 主 Agent 白名单（仅这些可以亲自做）
 
@@ -48,9 +51,13 @@ alwaysApply: true
 | "派发开销大，不如直接写" | 这是规则要求，不是性能优化建议。 |
 | "顺手把这个也改了吧" | 顺手 = 越权执行。回到门禁重新判断。 |
 | "这是连续任务的一部分" | 每个可独立执行的子任务单独走路由判断。 |
+| "用户对设计/逻辑不满，我直接改代码或改视觉就好" | 这是**变更**，不是 bug。先走场景 G 分类门，变更必经 Product 域改 spec，再回写 Android 技术方案，不在代码里自定产品/视觉规则。 |
+| "我发现个问题，先当 bug 直接修了" | 先走场景 G 判定是 bug / 变更 / 遗留，再决定路由与记录位置（`BUG-NNN` / Product spec / `LEFT-NNN`），并登记 `intake.md`。 |
 
 ## 其他规则
 
 1. **组合任务**：一个请求含多个独立子任务时，按类别分别派发，可并行。
 2. **Android 功能工作流**：涉及 PRD 到实现的完整流程时，遵循 `.cursor/skills/android-feature-workflow/SKILL.md` 的多 Agent 协作模式。
-3. **可追溯**：派发时在 prompt 中给足上下文（子 Agent 看不到本轮对话历史），并在动手前用一句话说明"将派发给哪个子 Agent 做什么"。
+3. **问题分类门优先**：收到"对设计/逻辑不满、疑似 bug、设计还原"类请求时，先走 `android-feature-workflow` 场景 G 完成 bug/变更/遗留分类与 `intake.md` 登记，再按分类路由。严禁跳过分类直接改代码或改 spec。
+4. **变更必经 Product**：任何会改动产品规则、视觉规则或 PRD/设计未定义内容的需求，必须先经 Product 域（`product-workflow` / `product-reviewer`）更新 spec，Android 侧不得自行拍板。
+5. **可追溯**：派发时在 prompt 中给足上下文（子 Agent 看不到本轮对话历史），并在动手前用一句话说明"将派发给哪个子 Agent 做什么"。

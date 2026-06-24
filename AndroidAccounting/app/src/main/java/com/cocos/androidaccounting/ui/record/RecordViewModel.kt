@@ -7,6 +7,7 @@ import com.cocos.androidaccounting.data.model.Bill
 import com.cocos.androidaccounting.data.model.BillType
 import com.cocos.androidaccounting.data.model.Categories
 import java.time.Instant
+import java.time.LocalDate
 import com.cocos.androidaccounting.data.repository.BillRepository
 import com.cocos.androidaccounting.util.amountInputToCents
 import com.cocos.androidaccounting.util.appendDigit
@@ -48,7 +49,10 @@ class RecordViewModel @Inject constructor(
             RecordUiIntent.OpenDatePicker -> _uiState.update { it.copy(isDatePickerVisible = true) }
             RecordUiIntent.DismissDatePicker -> _uiState.update { it.copy(isDatePickerVisible = false) }
             is RecordUiIntent.ConfirmDate -> _uiState.update {
-                it.copy(date = intent.date, isDatePickerVisible = false)
+                // 防御：不允许保存未来日期，超出今天则钳制为今天
+                val today = LocalDate.now()
+                val safeDate = if (intent.date.isAfter(today)) today else intent.date
+                it.copy(date = safeDate, isDatePickerVisible = false)
             }
             RecordUiIntent.Save -> save()
         }

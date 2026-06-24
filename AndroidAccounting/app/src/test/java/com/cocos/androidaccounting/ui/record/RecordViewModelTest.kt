@@ -176,10 +176,25 @@ class RecordViewModelTest {
     }
 
     @Test
-    fun confirmDate() = runTest {
-        val newDate = LocalDate.of(2026, 1, 15)
-        viewModel.onIntent(RecordUiIntent.ConfirmDate(newDate))
-        assertEquals(newDate, viewModel.uiState.value.date)
+    fun confirmDate_pastDate_isAccepted() = runTest {
+        val pastDate = LocalDate.now().minusDays(30)
+        viewModel.onIntent(RecordUiIntent.ConfirmDate(pastDate))
+        assertEquals(pastDate, viewModel.uiState.value.date)
+        assertFalse(viewModel.uiState.value.isDatePickerVisible)
+    }
+
+    @Test
+    fun confirmDate_today_isAccepted() = runTest {
+        val today = LocalDate.now()
+        viewModel.onIntent(RecordUiIntent.ConfirmDate(today))
+        assertEquals(today, viewModel.uiState.value.date)
+    }
+
+    @Test
+    fun confirmDate_futureDate_isClampedToToday() = runTest {
+        val future = LocalDate.now().plusDays(1)
+        viewModel.onIntent(RecordUiIntent.ConfirmDate(future))
+        assertEquals(LocalDate.now(), viewModel.uiState.value.date)
         assertFalse(viewModel.uiState.value.isDatePickerVisible)
     }
 

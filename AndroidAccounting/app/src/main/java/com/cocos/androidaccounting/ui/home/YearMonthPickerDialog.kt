@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -16,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.cocos.androidaccounting.R
 import com.cocos.androidaccounting.ui.component.BottomSheetPicker
 import com.cocos.androidaccounting.ui.component.WheelPicker
-import java.time.Year
+import java.time.YearMonth
 
 @Composable
 fun YearMonthPickerDialog(
@@ -25,24 +26,32 @@ fun YearMonthPickerDialog(
     onConfirm: (year: Int, month: Int) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val currentYear = remember { Year.now().value }
-    val years = remember { (currentYear - 10..currentYear + 10).map { it.toString() } }
-    val months = remember { (1..12).map { "${it}月" } }
+    // 不允许选择未来年月：年上限为今年，今年时月上限为当前月
+    val now = remember { YearMonth.now() }
+    val currentYear = now.year
+    val years = remember { (currentYear - 10..currentYear).map { it.toString() } }
 
     var yearIndex by rememberSaveable {
         mutableIntStateOf((initialYear - (currentYear - 10)).coerceIn(0, years.lastIndex))
     }
     var monthIndex by rememberSaveable {
-        mutableIntStateOf((initialMonth - 1).coerceIn(0, months.lastIndex))
+        mutableIntStateOf((initialMonth - 1).coerceIn(0, 11))
+    }
+
+    val selectedYear = years[yearIndex].toInt()
+    val maxMonth = if (selectedYear == currentYear) now.monthValue else 12
+    val months = remember(maxMonth) { (1..maxMonth).map { "${it}月" } }
+    val safeMonthIndex = monthIndex.coerceIn(0, months.lastIndex)
+
+    LaunchedEffect(maxMonth) {
+        if (monthIndex > maxMonth - 1) monthIndex = maxMonth - 1
     }
 
     BottomSheetPicker(
         title = stringResource(R.string.home_year_month_picker_title),
         onDismiss = onDismiss,
         onConfirm = {
-            val selectedYear = years[yearIndex].toInt()
-            val selectedMonth = monthIndex + 1
-            onConfirm(selectedYear, selectedMonth)
+            onConfirm(selectedYear, safeMonthIndex + 1)
         },
     ) {
         Row(
@@ -58,7 +67,7 @@ fun YearMonthPickerDialog(
             )
             WheelPicker(
                 items = months,
-                selectedIndex = monthIndex,
+                selectedIndex = safeMonthIndex,
                 onIndexChange = { monthIndex = it },
                 modifier = Modifier.weight(1f).testTag("year_month_picker_month_wheel"),
             )

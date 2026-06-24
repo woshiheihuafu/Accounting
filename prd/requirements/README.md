@@ -25,7 +25,7 @@
 | REQ-ACCOUNTING-003 | 支出记账仅支持餐饮、购物、娱乐、日用四个类目，并在选择后进入金额录入 | PRD-CODE-ACCOUNTING-20260623 | draft | none |
 | REQ-ACCOUNTING-004 | 收入记账仅支持工资、理财、礼金、其他四个类目，并在选择后进入金额录入 | PRD-CODE-ACCOUNTING-20260623 | draft | none |
 | REQ-ACCOUNTING-005 | 金额键盘支持金额、备注、日期、删除、加减号和完成保存 | PRD-CODE-ACCOUNTING-20260623 | draft | none |
-| REQ-ACCOUNTING-006 | 首页年月选择器和记账日期选择器使用底部弹窗滚轮样式，支持上下滑动选择 | PRD-CODE-ACCOUNTING-20260623 | draft | none |
+| REQ-ACCOUNTING-006 | 首页年月选择器和记账日期选择器使用底部弹窗滚轮样式，支持上下滑动选择；不可选择未来日期/未来月 | PRD-CODE-ACCOUNTING-20260623 | draft | 2026-06-24 新增"禁止未来日期"规则：年月/日期选择器不可选未来，保存前 clamp 到今天（CHANGE-ACCOUNTING-001 / intake INTAKE-002） |
 
 ## 冲突检查清单
 

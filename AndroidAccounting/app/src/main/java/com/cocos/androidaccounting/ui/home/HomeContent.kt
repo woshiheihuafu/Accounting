@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Receipt
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,8 +31,10 @@ import androidx.compose.ui.unit.sp
 import com.cocos.androidaccounting.R
 import com.cocos.androidaccounting.data.model.Bill
 import com.cocos.androidaccounting.data.model.BillType
+import com.cocos.androidaccounting.data.model.Categories
 import com.cocos.androidaccounting.data.model.MonthlySummary
 import com.cocos.androidaccounting.ui.theme.LocalAccountingColors
+import com.cocos.androidaccounting.ui.theme.LocalAccountingTypography
 import com.cocos.androidaccounting.util.DateUtil
 import com.cocos.androidaccounting.util.MoneyFormatter
 import java.time.YearMonth
@@ -100,10 +101,10 @@ private fun MonthSelectorRow(yearMonth: YearMonth, onMonthClick: () -> Unit) {
             fontSize = 18.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.weight(1f))
         Text(
             text = yearMonth.year.toString(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = LocalAccountingTypography.current.amountSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
@@ -134,7 +135,7 @@ private fun SummaryCard(summary: MonthlySummary) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = MoneyFormatter.formatYuan(summary.expense),
-                style = MaterialTheme.typography.titleMedium,
+                style = LocalAccountingTypography.current.amountMedium,
                 color = accountingColors.expenseRed,
             )
         }
@@ -152,7 +153,7 @@ private fun SummaryCard(summary: MonthlySummary) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = MoneyFormatter.formatYuan(summary.income),
-                style = MaterialTheme.typography.titleMedium,
+                style = LocalAccountingTypography.current.amountMedium,
                 color = accountingColors.incomeGreen,
             )
         }
@@ -185,7 +186,7 @@ private fun DateGroupHeader(group: BillGroup) {
         if (group.dayExpense > 0L) {
             Text(
                 text = MoneyFormatter.formatYuan(group.dayExpense),
-                style = MaterialTheme.typography.bodyMedium,
+                style = LocalAccountingTypography.current.amountSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
@@ -207,9 +208,9 @@ private fun BillItemRow(bill: Bill, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = Icons.Outlined.Receipt,
+            painter = painterResource(id = Categories.iconResFor(bill.category)),
             contentDescription = bill.category,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(22.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(modifier = Modifier.width(12.dp))
@@ -229,7 +230,7 @@ private fun BillItemRow(bill: Bill, onClick: () -> Unit) {
         }
         Text(
             text = MoneyFormatter.formatSignedYuan(bill.type, bill.amount),
-            style = MaterialTheme.typography.titleMedium,
+            style = LocalAccountingTypography.current.amountMedium,
             color = amountColor,
         )
     }

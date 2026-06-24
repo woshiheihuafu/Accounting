@@ -1,6 +1,6 @@
 ---
 name: android-feature-workflow
-description: 管理 Android 功能从 PRD/Product 交接到实现的交付流程，包括中文整体技术方案、模块技术方案、审批门禁、进度更新、模块内 bug 记录、Product 变更后的 Android 技术方案更新，以及默认多 Agent 协作。适用于从 PRD/设计稿/Product 影响摘要生成或更新 Android 技术方案、启动或继续模块、审批模块方案、开发 Android 模块、修复 Android 功能 bug、更新需求进度或跨天恢复工作。
+description: 管理 Android 功能从 PRD/Product 交接到实现的交付流程，包括中文整体技术方案、模块技术方案、审批门禁、进度更新、模块内 bug 与遗留问题（LEFT）记录、问题分类门（对用户不满/疑似 bug/变更与设计还原差距做分类与路由）、Product 变更后的 Android 技术方案更新，以及默认多 Agent 协作。适用于从 PRD/设计稿/Product 影响摘要生成或更新 Android 技术方案、启动或继续模块、审批模块方案、开发 Android 模块、修复 Android 功能 bug、对设计还原差距或用户不满做分类与路由、更新需求进度或跨天恢复工作。
 ---
 
 # Android 功能工作流
@@ -19,7 +19,7 @@ description: 管理 Android 功能从 PRD/Product 交接到实现的交付流程
 
 技术方案、进度记录、审批记录、bug 记录和必要代码注释默认使用中文。代码标识符、package 名、class 名、function 名、resource key 和文件名保持英文，除非 Android 约定另有要求。
 
-本 skill 是 Android 功能工作流状态、审批门禁、功能文档职责、进度表标记、bug 记录格式和默认 Agent 分工的事实来源。`.cursor/rules/android-development.mdc` 负责路由任务并定义长期工程规则。专门的 Android skills 只提供执行检查清单，不应重复定义 workflow 状态、审批或 Agent 配置。
+本 skill 是 Android 功能工作流状态、审批门禁、功能文档职责、进度表标记、bug 与遗留问题（LEFT）记录格式、问题分类门（场景 G）和默认 Agent 分工的事实来源。`.cursor/rules/agent-routing.mdc` 负责路由任务并定义 Agent 分派门禁；`.cursor/rules/android-development.mdc` 定义长期工程规则。专门的 Android skills 只提供执行检查清单，不应重复定义 workflow 状态、审批或 Agent 配置。
 
 Product PRD、设计稿、需求索引、设计索引和端侧影响摘要是项目级输入，由 `product-workflow` 管理。只有当用户要求 Android 技术方案或 Android 实现工作时，本 Android workflow 才消费这些输入。消费 Product 输入时，PRD 优先于竞品截图、参考图和 OCR 结果；设计输入包含 PRD 非目标内容时，必须在技术方案中标记为不实现或需确认。
 
@@ -40,7 +40,10 @@ Android 需求文档默认放在：
 ```text
 AndroidAccounting/docs/requirements/<feature-name>/overall-tech-plan.md
 AndroidAccounting/docs/requirements/<feature-name>/modules/<module-name>-tech-plan.md
+AndroidAccounting/docs/requirements/<feature-name>/intake.md
 ```
+
+`intake.md` 是问题分类门（场景 G）的**轻量 triage 索引台账**：每条只登记原始诉求、分类、路由去向、指向最终事实源的指针和状态。它**只存索引，不存详情**——bug/遗留详情仍写在模块技术方案，变更详情仍写在 Product 域 PRD/设计/索引，避免形成第二事实源。
 
 如果用户提供其他位置，使用用户指定位置，但保持相同的文档职责。
 
@@ -216,6 +219,8 @@ Android 工程快照是某个时间点的快照。不要在每次代码变更后
 8. 如果模块所有已知问题都已解决，将模块状态设为 `completed`；否则保持 `completed_with_issues`。
 9. 只更新 `overall-tech-plan.md` 的进度。
 
+修复完成或确认归类后，在功能 `intake.md` 登记或更新对应条目（指针指向本 `BUG-NNN`）。
+
 模块技术方案中的 bug 格式：
 
 ```text
@@ -227,6 +232,31 @@ Android 工程快照是某个时间点的快照。不要在每次代码变更后
 - 描述：
 - 位置：
 - 解决方案：
+- 创建时间：
+- 更新时间：
+```
+
+## Bug 与遗留问题（LEFT）的区分
+
+两者都记录在模块技术方案的「## Bug 与遗留问题」段，但语义和编号不同：
+
+- **Bug（`BUG-NNN`）**：实现 ≠ 既定 spec（PRD/设计/技术方案已明确，实现没做到）。应尽快修复，未修复时模块为 `completed_with_issues`。
+- **遗留问题（`LEFT-NNN`）**：已知但本轮**有意不修**的技术债、已知限制或延期项（spec 未要求改，只是当前实现做了简化或暂缓）。不阻塞模块完成，但需登记触发/偿还条件。
+
+不要把"对设计或逻辑不满、需要改 spec"当成 bug 或遗留在 Android 侧自行决定；那属于**变更**，走场景 G 分类后转 Product 域（见场景 G）。
+
+模块技术方案中的遗留问题格式：
+
+```text
+### LEFT-001：<标题>
+
+- 类型：tech-debt | known-limitation | deferred
+- 状态：open | deferred | accepted | resolved
+- 严重级别：low | medium | high
+- 描述：
+- 位置：
+- 触发 / 偿还条件：
+- 关联：BUG-* | REQ-* | DESIGN-* | 风险 R*
 - 创建时间：
 - 更新时间：
 ```
@@ -295,6 +325,22 @@ Android 工程快照是某个时间点的快照。不要在每次代码变更后
 ```
 
 除非 Product 变更实质影响核心架构、模块结构、核心依赖或项目布局，否则场景 F 不得更新 Android 工程快照。
+
+## 场景 G：问题分类门（不满 / Bug / 变更 / 设计还原 triage）
+
+当用户报告对设计或逻辑的不满、报告疑似 bug、要求做设计还原检查，或在工作中发现与 PRD/设计/技术方案不一致时使用。**本场景是入口门禁：先分类、后路由，不允许直接改代码或改 spec。**
+
+步骤：
+
+1. 不要先动手改代码或改文档。
+2. 采集证据并对照事实源（优先级从高到低）：PRD → 设计稿/设计索引/需求索引 → 模块技术方案 → 实际实现与运行表现。证据采集（只读对照）应委派只读探查 Agent（如 `explore`）。
+3. 将每个问题归类为以下三类之一：
+   - **Bug（实现 ≠ 既定 spec）**：PRD/设计/技术方案已明确，实现没做到。→ 走场景 D，在模块技术方案记 `BUG-NNN` 并修复。
+   - **变更（spec 本身要改，含 PRD 欠定义需补规则）**：PRD/设计/产品规则需要新增或修改。→ **先走 Product 域**（`product-workflow`：更新 PRD/`.pen`/需求索引/设计索引，必要时 `product-reviewer` 审查），再走场景 F 把变更回写 Android 技术方案，最后实现。Android workflow **不得绕过 Product 在代码里自行定义新的产品规则或视觉规则**。
+   - **遗留问题（已知但本轮不修）**：技术债、已知限制或延期项。→ 在模块技术方案记 `LEFT-NNN`，模块视情况标 `completed_with_issues`。
+4. 在功能 `intake.md` 登记一条：原始诉求、分类、路由去向、指针（`BUG-NNN` / `REQ-*`·`DESIGN-*`·`SCREEN-*` / `LEFT-NNN`）和状态。台账只存索引，不复制详情。
+5. 设计还原特例：还原检查产出的每条差距都必须逐条归入上述三类。"实现没还原设计/PRD 已定义内容" = Bug；"觉得设计本身需要调整、或 PRD/设计未定义而要新增规则" = 变更（走 Product），不得在 Android 代码里直接拍板新的视觉或交互规则。
+6. 完成分类与路由后，按对应场景（D / F / 模块开发）继续，并保持各事实源与 `intake.md` 同步。
 
 ## 必需汇报
 

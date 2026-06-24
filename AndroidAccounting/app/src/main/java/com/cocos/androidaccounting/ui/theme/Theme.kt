@@ -15,7 +15,7 @@ private val LightColorScheme = lightColorScheme(
     surface = PaperWhite,
     onSurface = InkBlack,
     surfaceVariant = SurfaceGray,
-    onSurfaceVariant = InkBlack,
+    onSurfaceVariant = TextSecondary,
     outline = DividerGray,
     outlineVariant = DividerGray,
 )
@@ -28,7 +28,7 @@ private val DarkColorScheme = darkColorScheme(
     surface = PaperWhiteDark,
     onSurface = InkBlackDark,
     surfaceVariant = SurfaceGrayDark,
-    onSurfaceVariant = InkBlackDark,
+    onSurfaceVariant = TextSecondaryDark,
     outline = DividerGrayDark,
     outlineVariant = DividerGrayDark,
 )
