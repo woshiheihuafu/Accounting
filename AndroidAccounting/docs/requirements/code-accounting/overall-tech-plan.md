@@ -334,7 +334,6 @@ M5: 记账页 ──→ M2: 数据层 ──────────┘
 | R4 | 架构假设 | 单模块 `:app` 内按包分层，不拆 Gradle 模块 | 后续模块化成本 | 包结构按 feature 组织，保持边界清晰；功能增长后可低成本拆分 |
 | R5 | 依赖风险 | Hilt、Room、Navigation Compose 版本兼容性（Kotlin 2.2.10 + AGP 9.2.1）；AGP 9.x 属于大版本更新，Hilt Gradle 插件对 AGP 9.x 的兼容性尚需验证 | 编译失败 | M1 阶段设为**硬性门禁**：先跑通空依赖链编译再写业务；`hilt-compiler` 通过 `ksp()` 接入而非 kapt |
 | R6 | 设计假设 | .pen 设计稿无法通过 MCP 直接验证内容完整性 | 实现可能遗漏设计细节 | 依赖 PRD 文字描述和设计索引作为实现依据；开发阶段逐页对照 |
-| R7 | 产品风险 | 两版 PRD（20260619 鲨鱼 / 20260623 墨与纸）当前均为 `draft` 且并行对比，需求索引注明"最终实现方案待用户选定" | 视觉方案变更导致返工 | 用户已在技术方案生成前确认选定墨与纸方案（见 A6）；PRD 正式 approved 前按此方案推进 |
 | R8 | 资源/合规风险 | PRD 要求类目图标和底部 Bar 图标为"线性风格重绘、不复制受保护素材"；图标资产的设计产出和合规审查是真实工作量 | 阻塞 M1（Design System）和 M5（类目网格）的 UI 还原 | 开发阶段可先用 Material Icons 占位；设计产出后替换为正式资源 |
 
 假设：
@@ -344,7 +343,7 @@ M5: 记账页 ──→ M2: 数据层 ──────────┘
 - A3：金额使用 `Long`（分为单位）存储，避免浮点精度问题；UI 层格式化为 `¥xx.xx` 显示。
 - A4：日期范围不设上下限约束，用户可选择任意日期。
 - A5：底部 Bar 结构固定为五个入口，后续功能逐步解锁。
-- A6：**已确认选定 PRD-CODE-ACCOUNTING-20260623（墨与纸）作为唯一实现依据**。用户在技术方案生成前已选择此版本，PRD-CODE-ACCOUNTING-20260619（鲨鱼风格）仅作对比参考，不进入实现。
+- A6：实现依据为 PRD-CODE-ACCOUNTING-20260623（墨与纸方案），该 PRD 为本期唯一有效需求来源。
 - A7：记账页输入过程中进程被杀或屏幕旋转，首期不恢复未完成输入（不使用 `SavedStateHandle` 保存中间态）。
 - A8：金额键盘的加减号（+/−）首期定义为简单连加/连减操作（非计算器模式），具体交互在 M5 模块方案中细化。
 
@@ -356,7 +355,7 @@ M5: 记账页 ──→ M2: 数据层 ──────────┘
 | DI-2 | 竞品截图 `prd/image/2.点击记账-支出.png` | 包含 20+ 支出类目（远超 PRD 定义的 4 个） | 仅实现 PRD 定义的餐饮、购物、娱乐、日用 |
 | DI-3 | 竞品截图 `prd/image/3.点击记账-收入.png` | 包含多个收入类目 | 仅实现 PRD 定义的工资、理财、礼金、其他 |
 | DI-4 | 设计稿 `code-accounting-v2.pen` | .pen 文件未在编辑器中打开，无法通过 Pencil MCP 直接验证是否包含 PRD 非目标内容 | 以 PRD 文字描述和设计索引为实现依据；建议后续打开 .pen 文件做逐页验证 |
-| DI-5 | PRD 两版差异 | 占位入口：首期「暂未实现」→ 墨与纸改为 Toast「即将推出」1.5 秒 | 按墨与纸方案实现 Toast |
+| DI-5 | PRD 占位入口规格 | 图表、发现、我的入口点击显示 Toast「即将推出」1.5 秒 | 按 PRD 实现 Toast |
 
 ## 本次生成记录
 
@@ -369,8 +368,7 @@ M5: 记账页 ──→ M2: 数据层 ──────────┘
 - AGENTS.md（仓库根）
 - AndroidAccounting/AGENTS.md
 - .codex/skills/android-feature-workflow/SKILL.md
-- prd/code-accounting-prd-20260619.md（对比参考）
-- prd/code-accounting-prd-20260623.md（主 PRD）
+- prd/code-accounting-prd-20260623.md
 - prd/requirements/README.md
 - prd/designs/README.md
 - prd/image/1~6 竞品截图（设计输入检查）

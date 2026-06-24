@@ -54,7 +54,7 @@ prd/<feature-slug>-prd-<YYYYMMDD>.md
 - 同一天同一功能确实需要多个独立 PRD 时，在日期后追加 `-v02`、`-v03`，例如 `prd/code-accounting-prd-20260617-v02.md`。
 - 追加小范围变更时，优先更新当前 PRD 的变更记录；当变更会改变核心流程、范围边界、验收标准或形成新阶段时，创建新的日期后缀 PRD。
 - 新 PRD 替代或更新旧 PRD 时，不删除旧文件；在新旧 PRD 的变更记录或关联关系中写明 `更新`、`替代`、`被替代`。
-- 设计稿文件名应尽量与对应 PRD 使用同一 `<feature-slug>`，例如 `prd/designs/code-accounting.pen`；如设计稿也需要保留多版本，可追加同样的日期后缀。
+- 设计稿文件名应尽量与对应 PRD 使用同一 `<feature-slug>`，例如 `prd/designs/code-accounting-v2.pen`；如设计稿也需要保留多版本，可追加同样的日期后缀。
 
 ## PRD 索引规则
 

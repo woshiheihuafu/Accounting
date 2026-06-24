@@ -6,23 +6,9 @@
 
 | 设计 ID | 资产 | 关联 REQ | 页面 | 流程 | 状态 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- |
-| DESIGN-ACCOUNTING-001 | [`prd/designs/code-accounting.pen`](./code-accounting.pen) | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | SCREEN-ACCOUNTING-001 至 SCREEN-ACCOUNTING-006 | FLOW-ACCOUNTING-001 至 FLOW-ACCOUNTING-003 | draft | CodeAccounting 首期移动端设计稿（鲨鱼风格） |
-| DESIGN-ACCOUNTING-002 | [`prd/designs/code-accounting-v2.pen`](./code-accounting-v2.pen) | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | SCREEN-ACCOUNTING-V2-001 至 SCREEN-ACCOUNTING-V2-006 | FLOW-ACCOUNTING-V2-001 至 FLOW-ACCOUNTING-V2-003 | draft | CodeAccounting 墨与纸视觉重设计移动端设计稿 |
+| DESIGN-ACCOUNTING-002 | [`prd/designs/code-accounting-v2.pen`](./code-accounting-v2.pen) | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | SCREEN-ACCOUNTING-V2-001 至 SCREEN-ACCOUNTING-V2-006 | FLOW-ACCOUNTING-V2-001 至 FLOW-ACCOUNTING-V2-003 | draft | CodeAccounting 墨与纸移动端设计稿 |
 
 ## 页面索引
-
-### DESIGN-ACCOUNTING-001（鲨鱼风格）
-
-| SCREEN ID | 页面 | 关联 REQ | 设计资产 | 状态 | 备注 |
-| --- | --- | --- | --- | --- | --- |
-| SCREEN-ACCOUNTING-001 | 首页-明细 | REQ-ACCOUNTING-001, REQ-ACCOUNTING-002 | DESIGN-ACCOUNTING-001 | draft | 无首页快捷入口，无登录提示 |
-| SCREEN-ACCOUNTING-002 | 首页-年月选择弹窗 | REQ-ACCOUNTING-001, REQ-ACCOUNTING-006 | DESIGN-ACCOUNTING-001 | draft | 底部弹窗滚轮式年/月选择 |
-| SCREEN-ACCOUNTING-003 | 记账-支出类目 | REQ-ACCOUNTING-003 | DESIGN-ACCOUNTING-001 | draft | 仅餐饮、购物、娱乐、日用 |
-| SCREEN-ACCOUNTING-004 | 记账-收入类目 | REQ-ACCOUNTING-004 | DESIGN-ACCOUNTING-001 | draft | 仅工资、理财、礼金、其他 |
-| SCREEN-ACCOUNTING-005 | 记账-金额键盘 | REQ-ACCOUNTING-003, REQ-ACCOUNTING-004, REQ-ACCOUNTING-005 | DESIGN-ACCOUNTING-001 | draft | 类目选中态、金额、备注、日期、完成 |
-| SCREEN-ACCOUNTING-006 | 记账-日期选择弹窗 | REQ-ACCOUNTING-005, REQ-ACCOUNTING-006 | DESIGN-ACCOUNTING-001 | draft | 底部弹窗滚轮式年/月/日选择 |
-
-### DESIGN-ACCOUNTING-002（墨与纸）
 
 | SCREEN ID | 页面 | 关联 REQ | 设计资产 | 状态 | 备注 |
 | --- | --- | --- | --- | --- | --- |
@@ -34,16 +20,6 @@
 | SCREEN-ACCOUNTING-V2-006 | 记账-日期选择弹窗 | REQ-ACCOUNTING-005, REQ-ACCOUNTING-006 | DESIGN-ACCOUNTING-002 | draft | 三列滚轮，样式同年月选择器 |
 
 ## 流程索引
-
-### DESIGN-ACCOUNTING-001（鲨鱼风格）
-
-| FLOW ID | 流程 | 关联页面 | 关联 REQ | 状态 | 备注 |
-| --- | --- | --- | --- | --- | --- |
-| FLOW-ACCOUNTING-001 | 首页查看与切换年月 | SCREEN-ACCOUNTING-001, SCREEN-ACCOUNTING-002 | REQ-ACCOUNTING-001, REQ-ACCOUNTING-006 | draft | 切换后刷新汇总和明细 |
-| FLOW-ACCOUNTING-002 | 支出记账 | SCREEN-ACCOUNTING-003, SCREEN-ACCOUNTING-005, SCREEN-ACCOUNTING-006 | REQ-ACCOUNTING-003, REQ-ACCOUNTING-005, REQ-ACCOUNTING-006 | draft | 支出保存为负金额 |
-| FLOW-ACCOUNTING-003 | 收入记账 | SCREEN-ACCOUNTING-004, SCREEN-ACCOUNTING-005, SCREEN-ACCOUNTING-006 | REQ-ACCOUNTING-004, REQ-ACCOUNTING-005, REQ-ACCOUNTING-006 | draft | 收入保存为正金额 |
-
-### DESIGN-ACCOUNTING-002（墨与纸）
 
 | FLOW ID | 流程 | 关联页面 | 关联 REQ | 状态 | 备注 |
 | --- | --- | --- | --- | --- | --- |
