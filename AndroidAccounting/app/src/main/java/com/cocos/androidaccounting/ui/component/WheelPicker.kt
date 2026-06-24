@@ -104,7 +104,7 @@ fun WheelPicker(
                         text = item,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                            fontSize = if (isSelected) 18.sp else 16.sp,
+                            fontSize = if (isSelected) 20.sp else 16.sp,
                             color = if (isSelected) MaterialTheme.colorScheme.primary
                             else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                         ),

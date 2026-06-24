@@ -318,9 +318,9 @@ M5: 记账页 ──→ M2: 数据层 ──────────┘
 | M1: 基础设施 | ✅ completed | skipped_by_user | 2026-06-24 | 模块方案已生成，实现完成，代码审查通过，BUILD SUCCESSFUL |
 | M2: 数据层 | ✅ completed | approved_by_user | 2026-06-24 | 实现完成，代码审查通过，JVM 测试全部通过，BUILD SUCCESSFUL |
 | M3: 首页明细 | ✅ completed | approved_by_user | 2026-06-24 | 实现完成，代码审查通过，2 High + 3 Medium + 6 Low 全部修复，28 个 JVM 测试通过，BUILD SUCCESSFUL |
-| M4: 年月选择器 | ⏳ not_started | — | 2026-06-24 | — |
-| M5: 记账页 | ⏳ not_started | — | 2026-06-24 | — |
-| M6: 日期选择器 | ⏳ not_started | — | 2026-06-24 | — |
+| M4: 年月选择器 | ✅ completed | skipped_by_user | 2026-06-24 | 实现完成，WheelPicker 字号修复（18sp→20sp），YearMonthPickerDialog testTag 补充，28 个 JVM 测试通过，BUILD SUCCESSFUL |
+| M5: 记账页 | ✅ completed | skipped_by_user | 2026-06-24 | 实现完成，RecordViewModel/CategoryGrid/AmountKeyboard/RecordContent 全部新建，JVM 测试全部通过，BUILD SUCCESSFUL |
+| M6: 日期选择器 | ✅ completed | skipped_by_user | 2026-06-24 | 实现完成，DatePickerDialog 三列滚轮 + 日列联动，JVM 测试通过，BUILD SUCCESSFUL |
 
 整体功能状态：`technical_plan_created`
 
@@ -407,3 +407,9 @@ M5: 记账页 ──→ M2: 数据层 ──────────┘
 | 2026-06-24 | 模块方案 | 生成 M3 首页明细模块技术方案；审批 pending，待确认 DI-M3-1/2/3 后实现 | 场景 B |
 | 2026-06-24 | 模块实现 | M3 首页明细模块实现完成；Color.kt 色值更新（DI-M3-1）、AccountingBottomBar 记账按钮修复（DI-M3-3）、HomeViewModel/HomeContent/HomeRoute/YearMonthPickerDialog/MoneyFormatter/DateUtil 全部实现，18 个 JVM 测试全部通过，BUILD SUCCESSFUL；代码审查进行中 | 场景 C |
 | 2026-06-24 | 代码审查修复 | M3 代码审查发现 2 High/3 Medium/6 Low 问题，全部修复：catch 移入 flatMapLatest 内部（H1）、Effect 收集改用 flowWithLifecycle（H2）、切月 loading 过渡（M1）、补充测试用例（M2）、移除冗余排序（M3），Low 级：VerticalDivider 替换、onPrimary 替换、testTag 位置等；28 个测试全部通过，BUILD SUCCESSFUL | 场景 D |
+| 2026-06-24 | 模块方案 | 生成 M4 年月选择器模块技术方案；用户跳过审批，直接进入实现 | 场景 B |
+| 2026-06-24 | 模块实现 | M4 年月选择器模块实现完成；WheelPicker 选中态 fontSize 18sp→20sp（关闭 LEFT-M3-2），YearMonthPickerDialog 两列 WheelPicker 补充 testTag（关闭 LEFT-M3-1），28 个 JVM 测试通过，BUILD SUCCESSFUL | 场景 C |
+| 2026-06-24 | 模块方案 | 生成 M5 记账页、M6 日期选择器模块技术方案；用户跳过审批，直接进入实现 | 场景 B |
+| 2026-06-24 | 模块实现 | M5 记账页模块实现完成；RecordViewModel（MVI）、CategoryGrid、AmountKeyboard、RecordContent/Screen/Route 全部新建，MoneyFormatter 金额拼接函数、AppNavHost 接线，JVM 测试全部通过，BUILD SUCCESSFUL | 场景 C |
+| 2026-06-24 | 模块实现 | M6 日期选择器模块实现完成；DatePickerDialog.kt 新建（三列 WheelPicker + 日列联动 + testTag），JVM 测试通过，BUILD SUCCESSFUL | 场景 C |
+| 2026-06-24 | 代码审查修复 | M5 代码审查修复 2 Medium/5 Low 问题（Categories 数据流规范、键盘字体 token 化、testTag 补全、防重复提交测试、完成按钮圆角、边界测试），JVM 测试全部通过，BUILD SUCCESSFUL | 场景 D |

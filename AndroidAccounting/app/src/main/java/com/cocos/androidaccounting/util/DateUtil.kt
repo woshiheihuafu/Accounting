@@ -29,3 +29,6 @@ object DateUtil {
         }
     }
 }
+
+fun formatRecordDate(date: LocalDate): String =
+    "${date.monthValue}月${date.dayOfMonth}日"

@@ -498,8 +498,8 @@ fun weekdayLabel(date: LocalDate): String
 
 | # | 类型 | 描述 | 处理时机 |
 | --- | --- | --- | --- |
-| LEFT-M3-1 | 架构 | `YearMonthPickerDialog` 在 M3 内自包含实现；M4 完成后提取为通用组件并替换引用 | M4 实现后 |
-| LEFT-M3-2 | 视觉 | `WheelPicker` 选中态 18sp，与 PRD 20sp 有差 | M4 抽取组件统一调优 |
+| ~~LEFT-M3-1~~ | ~~架构~~ | ~~`YearMonthPickerDialog` 在 M3 内自包含实现；M4 完成后提取为通用组件并替换引用~~ | ~~M4 实现后~~ → 已关闭：M4 决策保留在 ui/home/（无跨模块复用需求，避免无价值重构） |
+| ~~LEFT-M3-2~~ | ~~视觉~~ | ~~`WheelPicker` 选中态 18sp，与 PRD 20sp 有差~~ | ~~M4 抽取组件统一调优~~ → 已在 M4 修复：WheelPicker.kt 选中态 fontSize 18sp→20sp |
 | ~~LEFT-M3-3~~ | ~~视觉~~ | ~~底部 Bar 记账按钮未按 PRD 做 44×44 鼠尾草绿圆角方形~~ | ~~已在 M3 实现：`AccountingBottomBar` 44dp + SageGreen + RoundedCornerShape(12dp)~~ |
 | LEFT-M3-4 | 资源 | 类目线条图标占位，待设计产出替换 | 设计资产就位后 |
 | LEFT-M3-5 | 视觉 | 摘要卡片「细描边 + 中间竖向分隔线」用 `DividerGray` token 近似 PRD `#E8E8E4` | DI-M3-1 确认色值后（已决策：维持现状，色差可接受） |
