@@ -6,9 +6,12 @@
 
 | 设计 ID | 资产 | 关联 REQ | 页面 | 流程 | 状态 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- |
-| DESIGN-ACCOUNTING-001 | [`prd/code-accounting.pen`](../code-accounting.pen) | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | SCREEN-ACCOUNTING-001 至 SCREEN-ACCOUNTING-006 | FLOW-ACCOUNTING-001 至 FLOW-ACCOUNTING-003 | draft | CodeAccounting 首期移动端设计稿 |
+| DESIGN-ACCOUNTING-001 | [`prd/code-accounting.pen`](../code-accounting.pen) | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | SCREEN-ACCOUNTING-001 至 SCREEN-ACCOUNTING-006 | FLOW-ACCOUNTING-001 至 FLOW-ACCOUNTING-003 | draft | CodeAccounting 首期移动端设计稿（鲨鱼风格） |
+| DESIGN-ACCOUNTING-002 | `prd/code-accounting-v2.pen`（待创建） | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | SCREEN-ACCOUNTING-V2-001 至 SCREEN-ACCOUNTING-V2-006 | FLOW-ACCOUNTING-V2-001 至 FLOW-ACCOUNTING-V2-003 | draft | CodeAccounting 墨与纸视觉重设计移动端设计稿 |
 
 ## 页面索引
+
+### DESIGN-ACCOUNTING-001（鲨鱼风格）
 
 | SCREEN ID | 页面 | 关联 REQ | 设计资产 | 状态 | 备注 |
 | --- | --- | --- | --- | --- | --- |
@@ -19,13 +22,34 @@
 | SCREEN-ACCOUNTING-005 | 记账-金额键盘 | REQ-ACCOUNTING-003, REQ-ACCOUNTING-004, REQ-ACCOUNTING-005 | DESIGN-ACCOUNTING-001 | draft | 类目选中态、金额、备注、日期、完成 |
 | SCREEN-ACCOUNTING-006 | 记账-日期选择弹窗 | REQ-ACCOUNTING-005, REQ-ACCOUNTING-006 | DESIGN-ACCOUNTING-001 | draft | 底部弹窗滚轮式年/月/日选择 |
 
+### DESIGN-ACCOUNTING-002（墨与纸）
+
+| SCREEN ID | 页面 | 关联 REQ | 设计资产 | 状态 | 备注 |
+| --- | --- | --- | --- | --- | --- |
+| SCREEN-ACCOUNTING-V2-001 | 首页-明细 | REQ-ACCOUNTING-001, REQ-ACCOUNTING-002 | DESIGN-ACCOUNTING-002 | draft | 纸白底，品牌名左上 16px，月份 36px 居左，收支描边卡片（红出绿入），明细条目无分隔线 |
+| SCREEN-ACCOUNTING-V2-002 | 首页-年月选择弹窗 | REQ-ACCOUNTING-001, REQ-ACCOUNTING-006 | DESIGN-ACCOUNTING-002 | draft | 40% 遮罩，纸白面板圆角 16px，确定按钮鼠尾草绿 |
+| SCREEN-ACCOUNTING-V2-003 | 记账-支出类目 | REQ-ACCOUNTING-003 | DESIGN-ACCOUNTING-002 | draft | 纸白底，Tab 鼠尾草绿下划线，类目无底色，选中淡绿圆角方形 |
+| SCREEN-ACCOUNTING-V2-004 | 记账-收入类目 | REQ-ACCOUNTING-004 | DESIGN-ACCOUNTING-002 | draft | 同支出页结构 |
+| SCREEN-ACCOUNTING-V2-005 | 记账-金额键盘 | REQ-ACCOUNTING-003, REQ-ACCOUNTING-004, REQ-ACCOUNTING-005 | DESIGN-ACCOUNTING-002 | draft | 纸白底无边框键盘，等宽金额字体，绿色光标，完成按钮鼠尾草绿 |
+| SCREEN-ACCOUNTING-V2-006 | 记账-日期选择弹窗 | REQ-ACCOUNTING-005, REQ-ACCOUNTING-006 | DESIGN-ACCOUNTING-002 | draft | 三列滚轮，样式同年月选择器 |
+
 ## 流程索引
+
+### DESIGN-ACCOUNTING-001（鲨鱼风格）
 
 | FLOW ID | 流程 | 关联页面 | 关联 REQ | 状态 | 备注 |
 | --- | --- | --- | --- | --- | --- |
 | FLOW-ACCOUNTING-001 | 首页查看与切换年月 | SCREEN-ACCOUNTING-001, SCREEN-ACCOUNTING-002 | REQ-ACCOUNTING-001, REQ-ACCOUNTING-006 | draft | 切换后刷新汇总和明细 |
 | FLOW-ACCOUNTING-002 | 支出记账 | SCREEN-ACCOUNTING-003, SCREEN-ACCOUNTING-005, SCREEN-ACCOUNTING-006 | REQ-ACCOUNTING-003, REQ-ACCOUNTING-005, REQ-ACCOUNTING-006 | draft | 支出保存为负金额 |
 | FLOW-ACCOUNTING-003 | 收入记账 | SCREEN-ACCOUNTING-004, SCREEN-ACCOUNTING-005, SCREEN-ACCOUNTING-006 | REQ-ACCOUNTING-004, REQ-ACCOUNTING-005, REQ-ACCOUNTING-006 | draft | 收入保存为正金额 |
+
+### DESIGN-ACCOUNTING-002（墨与纸）
+
+| FLOW ID | 流程 | 关联页面 | 关联 REQ | 状态 | 备注 |
+| --- | --- | --- | --- | --- | --- |
+| FLOW-ACCOUNTING-V2-001 | 首页查看与切换年月 | SCREEN-ACCOUNTING-V2-001, SCREEN-ACCOUNTING-V2-002 | REQ-ACCOUNTING-001, REQ-ACCOUNTING-006 | draft | 月份 36px 居左点击触发，确定按钮鼠尾草绿 |
+| FLOW-ACCOUNTING-V2-002 | 支出记账 | SCREEN-ACCOUNTING-V2-003, SCREEN-ACCOUNTING-V2-005, SCREEN-ACCOUNTING-V2-006 | REQ-ACCOUNTING-003, REQ-ACCOUNTING-005, REQ-ACCOUNTING-006 | draft | 支出保存为负金额 |
+| FLOW-ACCOUNTING-V2-003 | 收入记账 | SCREEN-ACCOUNTING-V2-004, SCREEN-ACCOUNTING-V2-005, SCREEN-ACCOUNTING-V2-006 | REQ-ACCOUNTING-004, REQ-ACCOUNTING-005, REQ-ACCOUNTING-006 | draft | 收入保存为正金额 |
 
 ## 参考截图
 

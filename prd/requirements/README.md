@@ -14,7 +14,8 @@
 
 | PRD ID | 标题 | 文件 | 创建日期 | 状态 | 范围摘要 | 关联需求 | 关联设计 | 关系 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PRD-CODE-ACCOUNTING-20260619 | CodeAccounting 首期记账体验 | [`prd/code-accounting-prd-20260619.md`](../code-accounting-prd-20260619.md) | 2026-06-19 | draft | 首页明细、底部 Bar、支出/收入类目、金额键盘、年月和日期选择器 | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | [`prd/code-accounting.pen`](../code-accounting.pen) | 关联：DESIGN-ACCOUNTING-001；更新：none；替代：none；被替代：none；冲突：none | 当前唯一有效 PRD |
+| PRD-CODE-ACCOUNTING-20260619 | CodeAccounting 首期记账体验 | [`prd/code-accounting-prd-20260619.md`](../code-accounting-prd-20260619.md) | 2026-06-19 | draft | 首页明细、底部 Bar、支出/收入类目、金额键盘、年月和日期选择器 | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | [`prd/code-accounting.pen`](../code-accounting.pen) | 关联：DESIGN-ACCOUNTING-001；更新：none；替代：none；被替代：none；冲突：none | 鲨鱼风格视觉方案 |
+| PRD-CODE-ACCOUNTING-20260623 | CodeAccounting 墨与纸视觉重设计 | [`prd/code-accounting-prd-20260623.md`](../code-accounting-prd-20260623.md) | 2026-06-23 | draft | 同首期功能范围，全新墨与纸极简视觉体系（纸白底、墨黑排版、鼠尾草绿品牌色） | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | `prd/code-accounting-v2.pen`（待创建） | 关联：DESIGN-ACCOUNTING-002；更新：PRD-CODE-ACCOUNTING-20260619（视觉重设计，功能不变）；替代：none；被替代：none；冲突：none | 墨与纸视觉方案，与首期 PRD 并行对比 |
 
 ## 需求覆盖索引
 
@@ -29,8 +30,9 @@
 
 ## 冲突检查清单
 
-1. 已检查当前工作区：本次创建新的当前有效 PRD。
-2. 每个 `REQ-*` 只有一个当前来源 PRD。
+1. 已检查当前工作区：PRD-CODE-ACCOUNTING-20260619 和 PRD-CODE-ACCOUNTING-20260623 并行存在，功能范围相同，视觉方案不同。
+2. 每个 `REQ-*` 在两个 PRD 中定义一致，无功能冲突；视觉规格在各自 PRD 中独立定义。
 3. 每个面向用户的核心需求均有对应 `SCREEN-*` 或 `FLOW-*` 映射。
 4. 本期明确剔除登录、账号、云同步、营销入口和首页快捷入口。
 5. 端侧影响仅在 PRD 中摘要说明，不直接更新端级技术方案。
+6. 两个 PRD 为视觉方案对比关系，非替代关系；最终实现方案待用户选定。
