@@ -6,8 +6,8 @@
 
 | 设计 ID | 资产 | 关联 REQ | 页面 | 流程 | 状态 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- |
-| DESIGN-ACCOUNTING-001 | [`prd/code-accounting.pen`](../code-accounting.pen) | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | SCREEN-ACCOUNTING-001 至 SCREEN-ACCOUNTING-006 | FLOW-ACCOUNTING-001 至 FLOW-ACCOUNTING-003 | draft | CodeAccounting 首期移动端设计稿（鲨鱼风格） |
-| DESIGN-ACCOUNTING-002 | `prd/code-accounting-v2.pen`（待创建） | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | SCREEN-ACCOUNTING-V2-001 至 SCREEN-ACCOUNTING-V2-006 | FLOW-ACCOUNTING-V2-001 至 FLOW-ACCOUNTING-V2-003 | draft | CodeAccounting 墨与纸视觉重设计移动端设计稿 |
+| DESIGN-ACCOUNTING-001 | [`prd/designs/code-accounting.pen`](./code-accounting.pen) | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | SCREEN-ACCOUNTING-001 至 SCREEN-ACCOUNTING-006 | FLOW-ACCOUNTING-001 至 FLOW-ACCOUNTING-003 | draft | CodeAccounting 首期移动端设计稿（鲨鱼风格） |
+| DESIGN-ACCOUNTING-002 | [`prd/designs/code-accounting-v2.pen`](./code-accounting-v2.pen) | REQ-ACCOUNTING-001 至 REQ-ACCOUNTING-006 | SCREEN-ACCOUNTING-V2-001 至 SCREEN-ACCOUNTING-V2-006 | FLOW-ACCOUNTING-V2-001 至 FLOW-ACCOUNTING-V2-003 | draft | CodeAccounting 墨与纸视觉重设计移动端设计稿 |
 
 ## 页面索引
 
