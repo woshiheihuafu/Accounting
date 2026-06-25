@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,6 +31,9 @@ import androidx.compose.ui.unit.sp
 private val ItemHeight = 48.dp
 private const val VisibleItemCount = 5
 
+// 首尾各补 VisibleItemCount/2 个空占位项，使边界项也能滚到视口正中
+private const val EdgePadding = VisibleItemCount / 2
+
 @Composable
 fun WheelPicker(
     items: List<String>,
@@ -39,14 +41,23 @@ fun WheelPicker(
     onIndexChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // 带占位的总数：[empty×EdgePadding] + items + [empty×EdgePadding]
+    // items[i] 对应 paddedIndex = i + EdgePadding
+    // 当 firstVisibleItemIndex = k 时，视口中心的 paddedIndex = k + EdgePadding
+    // 对应 originalIndex = k → centerIndex = firstVisibleItemIndex（偏移相消）
+    val paddedSize = items.size + EdgePadding * 2
+
+    // initialFirstVisibleItemIndex = selectedIndex：
+    // paddedIndex=selectedIndex 在顶，视口中心 = selectedIndex + EdgePadding = items[selectedIndex] ✓
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
 
     val centerIndex by remember {
         derivedStateOf {
             val offset = listState.firstVisibleItemScrollOffset
             val itemHeightPx = listState.layoutInfo.viewportSize.height / VisibleItemCount
-            if (itemHeightPx == 0) listState.firstVisibleItemIndex
+            val raw = if (itemHeightPx == 0) listState.firstVisibleItemIndex
             else listState.firstVisibleItemIndex + if (offset > itemHeightPx / 2) 1 else 0
+            raw.coerceIn(0, items.size - 1)
         }
     }
 
@@ -92,27 +103,31 @@ fun WheelPicker(
                     )
                 },
         ) {
-            itemsIndexed(items, key = { _, item -> item }) { index, item ->
-                val isSelected = index == centerIndex
+            items(count = paddedSize, key = { it }) { paddedIndex ->
+                val originalIndex = paddedIndex - EdgePadding
+                val isPlaceholder = originalIndex < 0 || originalIndex >= items.size
+                val isSelected = !isPlaceholder && originalIndex == centerIndex
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(ItemHeight),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(
-                        text = item,
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                            fontSize = if (isSelected) 20.sp else 16.sp,
-                            color = if (isSelected) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                        ),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                    )
+                    if (!isPlaceholder) {
+                        Text(
+                            text = items[originalIndex],
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                fontSize = if (isSelected) 20.sp else 16.sp,
+                                color = if (isSelected) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            ),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                        )
+                    }
                 }
             }
         }

@@ -8,7 +8,7 @@ import java.time.YearMonth
 data class BillGroup(
     val date: LocalDate,
     val bills: List<Bill>,
-    val dayExpense: Long,
+    val dayNetAmount: Long,
 )
 
 data class HomeUiState(

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Accounting 启动器"
-  short_description: "通过 /start 选择仓库工作域和入口"
-  default_prompt: "使用 $accounting-start 在用户输入 /start 时选择仓库工作域。"

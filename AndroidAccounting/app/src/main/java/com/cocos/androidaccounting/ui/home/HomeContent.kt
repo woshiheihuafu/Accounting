@@ -183,9 +183,13 @@ private fun DateGroupHeader(group: BillGroup) {
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        if (group.dayExpense > 0L) {
+        if (group.dayNetAmount != 0L) {
+            val text = if (group.dayNetAmount > 0L)
+                "+${MoneyFormatter.formatYuan(group.dayNetAmount)}"
+            else
+                "-${MoneyFormatter.formatYuan(-group.dayNetAmount)}"
             Text(
-                text = MoneyFormatter.formatYuan(group.dayExpense),
+                text = text,
                 style = LocalAccountingTypography.current.amountSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

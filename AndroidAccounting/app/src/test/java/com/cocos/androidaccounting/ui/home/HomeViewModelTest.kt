@@ -94,22 +94,40 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun grouping_dayExpenseSumsOnlyExpense() = runTest {
+    fun grouping_dayNetAmount_incomeMinusExpense() = runTest {
         val currentMonth = YearMonth.now()
         val date = LocalDate.of(2026, 6, 10)
-        val bills = listOf(
-            makeBill(1L, BillType.EXPENSE, 1000L, date),
-            makeBill(2L, BillType.EXPENSE, 500L, date),
-            makeBill(3L, BillType.INCOME, 9999L, date),
+
+        // 收入 5000 + 支出 2000 → 净额 3000（净收入）
+        val billsWithBoth = listOf(
+            makeBill(1L, BillType.INCOME, 5000L, date),
+            makeBill(2L, BillType.EXPENSE, 2000L, date),
         )
-        fakeRepo.setBillsForMonth(currentMonth, bills)
-        fakeRepo.setSummaryForMonth(currentMonth, MonthlySummary(income = 9999L, expense = 1500L))
+        fakeRepo.setBillsForMonth(currentMonth, billsWithBoth)
+        fakeRepo.setSummaryForMonth(currentMonth, MonthlySummary(income = 5000L, expense = 2000L))
 
         viewModel.uiState.test {
             skipItems(1)
             val state = awaitItem()
             val group = state.groups.first { it.date == date }
-            assertEquals(1500L, group.dayExpense)
+            assertEquals(3000L, group.dayNetAmount)
+            cancelAndIgnoreRemainingEvents()
+        }
+
+        // 仅支出 2000 → 净额 -2000（净支出）
+        val dateOnly = LocalDate.of(2026, 6, 11)
+        val billsExpenseOnly = listOf(
+            makeBill(3L, BillType.EXPENSE, 2000L, dateOnly),
+        )
+        fakeRepo.setBillsForMonth(currentMonth, billsExpenseOnly)
+        fakeRepo.setSummaryForMonth(currentMonth, MonthlySummary(income = 0L, expense = 2000L))
+
+        val viewModel2 = HomeViewModel(fakeRepo)
+        viewModel2.uiState.test {
+            skipItems(1)
+            val state = awaitItem()
+            val group = state.groups.first { it.date == dateOnly }
+            assertEquals(-2000L, group.dayNetAmount)
             cancelAndIgnoreRemainingEvents()
         }
     }

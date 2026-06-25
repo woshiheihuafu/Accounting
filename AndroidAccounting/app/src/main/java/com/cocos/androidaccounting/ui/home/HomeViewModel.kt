@@ -103,6 +103,6 @@ private fun List<Bill>.toBillGroups(): List<BillGroup> =
             BillGroup(
                 date = date,
                 bills = bills,
-                dayExpense = bills.filter { it.type == BillType.EXPENSE }.sumOf { it.amount },
+                dayNetAmount = bills.sumOf { if (it.type == BillType.INCOME) it.amount else -it.amount },
             )
         }

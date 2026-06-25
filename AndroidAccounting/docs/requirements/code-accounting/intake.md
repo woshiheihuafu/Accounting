@@ -28,3 +28,5 @@
 | INTAKE-003 | 2026-06-24 | 首页明细账单左侧图标未对应实际类目 | bug | android-implementer（已改） | PRD 首页明细（类目线条图标）；实现 `Categories.iconResFor` + `HomeContent.BillItemRow` | resolved |
 | INTAKE-004 | 2026-06-24 | 未使用设计稿中的图标，需从设计稿导出为 Android Resource | bug | android-implementer（已改） | DESIGN-ACCOUNTING-002（Lucide 图标）；实现 `res/drawable/ic_*`（16 个 Vector Drawable） | resolved |
 | INTAKE-005 | 2026-06-24 | 等宽金额字体实现用系统 Monospace，而非技术方案 R2 所述"嵌入 DIN/JetBrains Mono" | 遗留 | 记录为遗留，按需偿还 | 技术方案风险 R2；M1 模块技术方案 `LEFT-001` | routed |
+| INTAKE-006 | 2026-06-24 | 月份/日期选择弹窗轮盘：选定项未在视口中间；最新一年/月/日（边界项）无法滚到中部 | bug | android-implementer 修复 `WheelPicker.kt` | M1 模块技术方案 `BUG-004` | resolved |
+| INTAKE-007 | 2026-06-25 | DateGroupHeader 右侧金额应为当日收支净额（收入−支出），而非仅显示支出合计 | 变更 | Product 域更新 PRD → 回写 M3 Android 技术方案 → 实现 | PRD 第 113 行；SCREEN-ACCOUNTING-V2-001；M3 模块技术方案 `DateGroupHeader` | resolved |

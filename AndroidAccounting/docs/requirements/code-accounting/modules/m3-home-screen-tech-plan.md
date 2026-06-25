@@ -6,7 +6,7 @@
 
 1. 头部品牌区（`Code记账`）+ 月份选择行（大号月份 + `▾` + 年份）。
 2. 收支摘要卡片（支出 / 收入双列）。
-3. 按日期分组的明细列表（日期分组头 + 当日支出合计 + 账单条目），含空态。
+3. 按日期分组的明细列表（日期分组头 + 当日收支净额 + 账单条目），含空态。
 4. 底部 Bar（复用 M1 `AccountingBottomBar`）：明细选中态、记账入口跳转、图表/发现/我的占位 Toast「即将推出」。
 5. 年月选择弹窗（`YearMonthPickerDialog`，基于 M1 `WheelPicker` + `BottomSheetPicker`），切换后刷新收支与明细。
 6. `HomeViewModel`（MVI）：`combine` 合并 `observeBillsByMonth` + `observeMonthlySummary`，按日期分组，转 `StateFlow<HomeUiState>`。
@@ -15,7 +15,7 @@
 
 - Compose 页面（`ui/home/`）：`HomeRoute.kt`、`HomeScreen.kt`、`HomeContent.kt`、`YearMonthPickerDialog.kt`。
 - MVI 契约（`ui/home/`）：`HomeUiState.kt`、`HomeUiIntent.kt`、`HomeUiEffect.kt`、`HomeViewModel.kt`。
-- UI 分组载体：`BillGroup`（`date: LocalDate, bills: List<Bill>`，含当日支出合计）。
+- UI 分组载体：`BillGroup`（`date: LocalDate, bills: List<Bill>`，含当日收支净额）。
 - 展示格式化工具：金额（分 → `¥xx.xx`）、日期分组头（`6月16日 周二`）、月份 / 年份标签，落在 `util/`。
 - 导航接线：填充 `navigation/AppNavHost.kt` 的 `composable<Route.Home>`。
 - 文案资源：`res/values/strings.xml` 新增首页相关字符串。
@@ -59,7 +59,7 @@
 | `MonthSelectorRow` | Content 子项 | 大号月份（36sp Bold）+ `▾`（中灰）+ 年份（14sp Regular 中灰）；整区 `clickable` → `onMonthClick` |
 | `SummaryCard` | Content 子项 | 纸白底 + 细描边圆角卡片（`AccountingShapes.medium` = 12dp）；水平二等分 + 中间竖向分隔线；左支出（`expenseRed`）/ 右收入（`incomeGreen`） |
 | `DetailSectionTitle` | Content 子项 | `明细`（16sp Medium，`InkBlack`，左对齐） |
-| `DateGroupHeader` | Content 子项 | 日期（`6月16日 周二`，14sp 中灰）+ 右侧当日支出合计（14sp 中灰） |
+| `DateGroupHeader` | Content 子项 | 日期（`6月16日 周二`，14sp 中灰）+ 右侧当日收支净额（14sp 中灰，净额为 0 时不显示）|
 | `BillItemRow` | Content 子项 | 类目图标（24dp 线条）+ 12dp 间隔 + 类目名 / 备注（16sp Regular `InkBlack`）+ 右侧金额（16sp Medium，支出 `-¥` 红 / 收入 `+¥` 绿） |
 | `HomeEmptyState` | Content 子项 | 居中 `暂无记账`（14sp 中灰，无插画） |
 | `YearMonthPickerDialog` | 弹窗 | `BottomSheetPicker` 容器 + 双列 `WheelPicker`（年 / 月） |
@@ -133,7 +133,7 @@ fun YearMonthPickerDialog(
 - 统一格式化：分 → `¥xx.xx`（如 `2300` → `¥23.00`），由纯函数 `formatYuan(cents: Long)` 完成（`util/MoneyFormatter.kt`），`Composable` 仅渲染字符串。
 - 摘要卡片：支出 / 收入均展示 `¥xx.xx`（无符号），颜色分别为 `LocalAccountingColors.current.expenseRed` / `incomeGreen`。
 - 明细条目金额：按 `Bill.type` 决定前缀与颜色——`EXPENSE` → `-¥xx.xx`（`expenseRed`）；`INCOME` → `+¥xx.xx`（`incomeGreen`）。前缀由 `formatSignedYuan(type, cents)` 拼接。
-- 当日支出合计（分组头右侧）：仅汇总当日 `EXPENSE`，展示 `¥xx.xx`（中灰，无符号），由 `BillGroup.dayExpense` 提供。
+- 当日收支净额（分组头右侧）：当日收入合计 − 当日支出绝对值合计，由 `BillGroup.dayNetAmount` 提供；净额 > 0 展示 `+¥xx.xx`（中灰），净额 < 0 展示 `-¥xx.xx`（中灰），净额 = 0 不显示。颜色固定中灰（不区分红绿）。
 - 颜色全部取自 Design System token（`LocalAccountingColors`），不在业务代码硬编码 `Color(...)`。
 
 > PRD 条目示例为 `-¥23` / `+¥50`（省略小数），摘要为 `¥23.00`。本方案统一用两位小数 `¥xx.xx`，差异记为 DI-M3-2 待产品确认；若确认条目省略整数小数，仅需调整 `formatSignedYuan`。
@@ -305,7 +305,7 @@ com.cocos.androidaccounting
 data class BillGroup(
     val date: LocalDate,
     val bills: List<Bill>,
-    val dayExpense: Long,   // 当日支出合计（分），= bills 中 EXPENSE 金额之和
+    val dayNetAmount: Long,   // 当日收支净额（分），= 收入之和 − 支出之和；正=净收入，负=净支出
 )
 ```
 
@@ -318,7 +318,7 @@ fun List<Bill>.toBillGroups(): List<BillGroup> =
             BillGroup(
                 date = date,
                 bills = bills,
-                dayExpense = bills.filter { it.type == BillType.EXPENSE }.sumOf { it.amount },
+                dayNetAmount = bills.sumOf { if (it.type == BillType.INCOME) it.amount else -it.amount },
             )
         }
 ```
@@ -430,7 +430,7 @@ fun weekdayLabel(date: LocalDate): String
 | `initialState_isLoading` | 订阅前 / 首发 `isLoading == true`，`groups` 空 |
 | `dataLoaded_mapsToGroupsAndSummary` | 多笔账单 → `uiState.groups` 正确分组、`summary` 透传、`isLoading == false` |
 | `grouping_preservesRepositoryOrder` | 输入已排序（跨日 + 同日多笔）→ 分组保序，组内顺序不变 |
-| `grouping_dayExpenseSumsOnlyExpense` | 某日含支出 + 收入 → `BillGroup.dayExpense` 仅累加 EXPENSE |
+| `grouping_dayNetAmount_incomeMinusExpense` | 某日含支出 + 收入 → `BillGroup.dayNetAmount` = 收入之和 − 支出之和 |
 | `emptyMonth_groupsEmpty` | 当月无账单 → `groups` 空、`summary` 为 0、`isLoading == false` |
 | `openPicker_setsVisibleTrue` | `OpenYearMonthPicker` → `isYearMonthPickerVisible == true` |
 | `dismissPicker_setsVisibleFalse` | `DismissYearMonthPicker` → `false` |
@@ -479,6 +479,8 @@ fun weekdayLabel(date: LocalDate): String
 | 2026-06-24 | approved_by_user | 用户确认：更新 M1 色值对齐 PRD、金额统一两位小数、本期修复 AccountingBottomBar 记账按钮 |
 | 2026-06-24 | in_progress | 实现完成，代码审查发现 2H/3M/6L 问题，修复进行中 |
 | 2026-06-24 | completed | 代码审查全部修复，28 个 JVM 测试通过，BUILD SUCCESSFUL |
+| 2026-06-25 | completed → completed_with_issues | CHANGE-ACCOUNTING-002：DateGroupHeader 右侧金额改为当日收支净额（INTAKE-007），BillGroup.dayExpense → dayNetAmount，方案更新，待实现 |
+| 2026-06-25 | completed_with_issues → completed | CHANGE-ACCOUNTING-002 实现完成：HomeUiState.BillGroup.dayExpense→dayNetAmount，toBillGroups() 改为收入−支出净额，DateGroupHeader 展示带符号金额（净额为0不显示），HomeViewModelTest 用例 grouping_dayNetAmount_incomeMinusExpense 更新并通过，全部 JVM 测试 BUILD SUCCESSFUL |
 
 ## Bug 与遗留问题
 
